@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" width="400" height="240">
+  <defs>
+    <!-- Fire Gradient for V -->
+    <linearGradient id="fireGrad" x1="0%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" stop-color="#b71c1c" />
+      <stop offset="35%" stop-color="#ff3d00" />
+      <stop offset="70%" stop-color="#ff9100" />
+      <stop offset="100%" stop-color="#fff59d" />
+    </linearGradient>
+
+    <!-- Ice Gradient for S -->
+    <linearGradient id="iceGrad" x1="50%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="25%" stop-color="#84ffff" />
+      <stop offset="65%" stop-color="#00e5ff" />
+      <stop offset="100%" stop-color="#0288d1" />
+    </linearGradient>
+
+    <!-- Gold Accent Gradient -->
+    <linearGradient id="goldRim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe082" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+
+    <!-- Fire Outer Glow Filter -->
+    <filter id="fireGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feColorMatrix type="matrix" values="1 0 0 0 1   0 0.3 0 0 0.4   0 0 0 0 0   0 0 0 1 0" />
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Ice Outer Glow Filter -->
+    <filter id="iceGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0   0 0.8 0 0 0.9   0 0 1 0 1   0 0 0 1 0" />
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Master Central Aura -->
+    <radialGradient id="clashGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(255, 255, 255, 0.45)" />
+      <stop offset="40%" stop-color="rgba(255, 170, 0, 0.25)" />
+      <stop offset="70%" stop-color="rgba(0, 210, 255, 0.2)" />
+      <stop offset="100%" stop-color="rgba(0, 0, 0, 0)" />
+    </radialGradient>
+  </defs>
+
+  <!-- Central Clash Aura -->
+  <circle cx="200" cy="120" r="110" fill="url(#clashGlow)" />
+
+  <!-- Background Dual Slash Accent (Fire Left, Ice Right) -->
+  <path d="M 120 40 L 190 120 L 130 190 L 100 120 Z" fill="rgba(255, 69, 0, 0.15)" filter="url(#fireGlow)" />
+  <path d="M 280 40 L 210 120 L 270 190 L 300 120 Z" fill="rgba(0, 229, 255, 0.15)" filter="url(#iceGlow)" />
+
+  <!-- Fire Flame "V" (Left) -->
+  <g filter="url(#fireGlow)">
+    <!-- Main V Glyph with Stylized Serif / Flame Horns -->
+    <path d="
+      M 75 42
+      C 95 42, 115 55, 125 78
+      L 165 178
+      L 185 178
+      L 205 92
+      C 192 105, 178 108, 170 95
+      C 162 82, 175 60, 190 52
+      C 180 50, 168 55, 160 62
+      L 142 125
+      L 112 55
+      C 125 55, 135 48, 132 38
+      C 122 40, 108 44, 98 42
+      C 88 40, 78 35, 75 42 Z" 
+      fill="url(#fireGrad)" 
+      stroke="#ffe082" 
+      stroke-width="1.5" />
+
+    <!-- Flame Wisps Rising from V -->
+    <path d="M 105 45 Q 112 25 102 12 Q 120 28 116 48 Z" fill="#ffeb3b" opacity="0.9" />
+    <path d="M 130 52 Q 145 28 138 8 Q 155 32 142 58 Z" fill="#ff7043" opacity="0.85" />
+    <path d="M 172 65 Q 185 38 180 18 Q 196 42 184 72 Z" fill="#ffa726" opacity="0.9" />
+  </g>
+
+  <!-- Ice Frost "S" (Right) -->
+  <g filter="url(#iceGlow)">
+    <!-- Main S Glyph with Crystalline Facets -->
+    <path d="
+      M 310 65
+      C 305 48, 285 36, 255 36
+      C 225 36, 205 52, 205 76
+      C 205 98, 222 110, 245 118
+      L 268 126
+      C 288 134, 298 144, 298 160
+      C 298 182, 275 198, 248 198
+      C 220 198, 202 184, 195 168
+      L 212 160
+      C 218 174, 230 182, 248 182
+      C 265 182, 280 172, 280 158
+      C 280 144, 268 134, 248 126
+      L 225 118
+      C 205 110, 190 95, 190 74
+      C 190 50, 212 22, 255 22
+      C 285 22, 312 36, 322 58
+      Z" 
+      fill="url(#iceGrad)" 
+      stroke="#e0f7fa" 
+      stroke-width="1.5" />
+
+    <!-- Ice Crystal Spikes Radiating from S -->
+    <polygon points="295,45 308,32 300,50" fill="#ffffff" opacity="0.95" />
+    <polygon points="318,75 334,70 318,82" fill="#80deea" opacity="0.9" />
+    <polygon points="290,175 312,185 288,188" fill="#e0f7fa" opacity="0.95" />
+    <polygon points="200,165 182,175 198,180" fill="#29b6f6" opacity="0.9" />
+    <polygon points="230,200 240,218 245,202" fill="#ffffff" opacity="0.85" />
+  </g>
+
+  <!-- Central Energy Spark -->
+  <circle cx="198" cy="120" r="4.5" fill="#ffffff" filter="url(#fireGlow)" />
+  <polygon points="198,102 201,118 216,120 201,122 198,138 195,122 180,120 195,118" fill="#ffffff" opacity="0.9" />
+</svg>

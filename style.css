@@ -1,0 +1,2635 @@
+/* ==========================================================================
+   style.css — ĐẠI CHIẾN VẬN MỆNH HN12A10
+   PHONG CÁCH: RPGUI (FANTASY RPG RETRO-MODERN CLASSIC)
+   Tối ưu hóa: Máy chiếu lớn 16:9, Tương phản cao, Chữ sắc nét, Hiệu ứng 3D
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Montserrat:wght@500;600;700;800;900&family=Philosopher:ital,wght@0,700;1,700&family=JetBrains+Mono:wght@700;800&display=swap');
+
+:root {
+  /* --- Bảng Màu Thần Thoại (Mythic RPG Palette) --- */
+  --bg-deep:        #07080d;
+  --bg-space:       #0d1019;
+  --bg-card:        #131722;
+  --bg-card-hover:  #1a2030;
+  --bg-parchment:   #1a1714;
+
+  /* --- Kim Loại & Vàng Hoàng Gia (RPGUI Golden Metal) --- */
+  --gold:           #f5b505;
+  --gold-bright:    #ffe27a;
+  --gold-dark:      #9c6f00;
+  --gold-shadow:    #5c3f00;
+  --gold-glow:      rgba(245, 181, 5, 0.45);
+  --border-gold:    #c99716;
+  --border-gold-lt: #ffd966;
+
+  /* --- 4 Hệ Nguyên Tố Vương Quốc --- */
+  /* Hỏa Long (Fire) */
+  --fire-primary:   #ff5722;
+  --fire-accent:    #ffab91;
+  --fire-glow:      rgba(255, 87, 34, 0.5);
+  --fire-bg:        rgba(255, 87, 34, 0.14);
+  --fire-border:    #d84315;
+
+  /* Băng Vũ (Ice) */
+  --ice-primary:    #00b4d8;
+  --ice-accent:     #90e0ef;
+  --ice-glow:       rgba(0, 180, 216, 0.5);
+  --ice-bg:         rgba(0, 180, 216, 0.14);
+  --ice-border:     #0077b6;
+
+  /* Lôi Thần (Thunder) */
+  --thunder-primary:#9d4edd;
+  --thunder-accent: #e0aaff;
+  --thunder-glow:   rgba(157, 78, 221, 0.5);
+  --thunder-bg:     rgba(157, 78, 221, 0.15);
+  --thunder-border: #7b2cbf;
+
+  /* Địa Mẫu (Earth) */
+  --earth-primary:  #2ec4b6;
+  --earth-accent:   #a7ffeb;
+  --earth-glow:     rgba(46, 196, 182, 0.5);
+  --earth-bg:       rgba(46, 196, 182, 0.14);
+  --earth-border:   #0f9f90;
+
+  /* --- Trạng Thái Phán Quyết --- */
+  --crimson:        #ff3344;
+  --crimson-glow:   rgba(255, 51, 68, 0.55);
+  --green:          #00e676;
+  --green-glow:     rgba(0, 230, 118, 0.55);
+
+  /* --- Chữ & Đường Kẻ --- */
+  --text-main:      #ffffff;
+  --text-muted:     #c5cdd9;
+  --border-glass:   rgba(255, 255, 255, 0.14);
+
+  /* --- Kiểu Chữ --- */
+  --font-fantasy:   'Philosopher', 'Cinzel', 'Montserrat', serif;
+  --font-display:   'Montserrat', 'Philosopher', sans-serif;
+  --font-sans:      'Montserrat', system-ui, sans-serif;
+  --font-timer:     'JetBrains Mono', ui-monospace, monospace;
+
+  /* --- Kích Thước Khung --- */
+  --app-max: 1720px;
+  --ui-scale: 1;
+}
+
+/* ==========================================================================
+   TỈ LỆ CHỮ MÀN HÌNH & MÁY CHIẾU LỚP HỌC (AUTO FIT 100VH)
+   ========================================================================== */
+html {
+  font-size: 15px;
+  height: 100%;
+  overflow-x: hidden;
+}
+@media (min-width: 1921px) { html { font-size: 16px; } }
+@media (max-width: 1366px) { html { font-size: 14px; } }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+input, textarea, [contenteditable] { user-select: text; }
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text-main);
+  min-height: 100vh;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background-color: #07080d;
+  background-image: 
+    radial-gradient(ellipse at 50% 15%, rgba(16, 22, 36, 0.88) 0%, rgba(6, 8, 14, 0.96) 80%),
+    url('assets/forest-bg.png');
+  background-size: cover;
+  background-position: center bottom;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* ==========================================================================
+   CANVAS HIỆU ỨNG (HẠT MA THUẬT & PHÁO HOA)
+   ========================================================================== */
+#ambient-magic-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ==========================================================================
+   HIỆU ỨNG RUNG CHẤN (SCREEN SHAKE)
+   ========================================================================== */
+.shake-impact {
+  animation: rpgScreenShake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes rpgScreenShake {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  15%  { transform: translate(-6px, 5px) rotate(-0.5deg); }
+  30%  { transform: translate(7px, -5px) rotate(0.5deg); }
+  45%  { transform: translate(-5px, 4px) rotate(-0.3deg); }
+  60%  { transform: translate(4px, -3px) rotate(0.2deg); }
+  75%  { transform: translate(-2px, 2px) rotate(0deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+/* ==========================================================================
+   KHUNG VIỀN RPGUI HOÀNG GIA (RPGUI GOLDEN FRAMES & STONE CONTAINERS)
+   ========================================================================== */
+/* Khung viền mạ vàng kép chạm trổ góc 3D */
+.side-team-panel,
+.kingdoms-sidebar-panel,
+.question-box,
+.timer-wrapper,
+.host-action-bar,
+.hero-horizontal-leaderboard,
+.boss-essay-card,
+.story-scroll-box,
+.kingdom-card,
+.matchup-side,
+.punish-modal-content,
+.picker-modal-content,
+.editor-modal-content {
+  background: linear-gradient(180deg, #161b28 0%, #10131d 100%);
+  border: 2px solid var(--border-gold);
+  border-radius: 14px;
+  position: relative;
+  box-shadow: 
+    inset 0 0 0 1px rgba(255, 230, 130, 0.3),
+    inset 0 0 20px rgba(0, 0, 0, 0.7),
+    0 8px 24px rgba(0, 0, 0, 0.65),
+    0 0 16px rgba(245, 181, 5, 0.15);
+}
+
+/* 4 Khấc Đinh Tán Góc Mạ Vàng (RPGUI Corner Studs) */
+.side-team-panel::before,
+.kingdoms-sidebar-panel::before,
+.question-box::before,
+.timer-wrapper::before,
+.kingdom-card::before,
+.hero-horizontal-leaderboard::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 16px;
+  pointer-events: none;
+  background: 
+    radial-gradient(circle at 4px 4px, #ffd700 2px, transparent 3px),
+    radial-gradient(circle at calc(100% - 4px) 4px, #ffd700 2px, transparent 3px),
+    radial-gradient(circle at 4px calc(100% - 4px), #ffd700 2px, transparent 3px),
+    radial-gradient(circle at calc(100% - 4px) calc(100% - 4px), #ffd700 2px, transparent 3px);
+  z-index: 2;
+}
+
+/* ==========================================================================
+   GAME ASSETS ICONS (THAY THẾ TOÀN BỘ EMOJI BẰNG SPRITES THỰC THỤ)
+   ========================================================================== */
+.nav-game-icon {
+  width: 26px;
+  height: 26px;
+  vertical-align: middle;
+  filter: drop-shadow(0 0 6px var(--gold));
+}
+
+.mini-game-icon {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+
+.mini-pixel-icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  image-rendering: pixelated;
+}
+
+.btn-game-icon {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
+}
+
+.btn-pixel-icon {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+  image-rendering: pixelated;
+}
+
+.title-game-icon {
+  width: 38px;
+  height: 38px;
+  vertical-align: middle;
+  margin-right: 8px;
+  filter: drop-shadow(0 0 10px var(--gold));
+}
+
+.mini-crown-icon {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  filter: drop-shadow(0 0 4px var(--gold));
+}
+
+.king-crown-asset {
+  width: 52px;
+  height: 52px;
+  filter: drop-shadow(0 0 12px var(--gold));
+  animation: kingCrownFloat 2.2s infinite alternate ease-in-out;
+}
+
+/* Biểu Tượng 4 Vương Quốc */
+.kingdom-crest-svg {
+  width: 44px;
+  height: 44px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+
+.theme-fire .kingdom-crest-svg { filter: drop-shadow(0 0 10px #ff5722); }
+.theme-ice .kingdom-crest-svg { filter: drop-shadow(0 0 10px #00b4d8); }
+.theme-thunder .kingdom-crest-svg { filter: drop-shadow(0 0 10px #9d4edd); }
+.theme-earth .kingdom-crest-svg { filter: drop-shadow(0 0 10px #2ec4b6); }
+
+.mini-crest-svg {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.matchup-crest-asset {
+  width: 95px;
+  height: 95px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.matchup-side.left .matchup-crest-asset { filter: drop-shadow(0 0 25px #ff5722); }
+.matchup-side.right .matchup-crest-asset { filter: drop-shadow(0 0 25px #00b4d8); }
+
+/* 5 Trụ Cột Sinh Tồn Icons */
+.pillar-game-svg {
+  width: 34px;
+  height: 34px;
+  display: block;
+  margin: 0 auto 6px;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4));
+}
+
+.pillar-pixel-img {
+  width: 34px;
+  height: 34px;
+  display: block;
+  margin: 0 auto 6px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 6px rgba(255, 51, 68, 0.6));
+}
+
+.mini-dot-svg {
+  width: 15px;
+  height: 15px;
+  vertical-align: middle;
+}
+
+.mini-dot-img {
+  width: 15px;
+  height: 15px;
+  vertical-align: middle;
+  image-rendering: pixelated;
+}
+
+.mini-status-icon {
+  width: 13px;
+  height: 13px;
+  vertical-align: middle;
+  margin-right: 3px;
+}
+
+/* Roulette & Boss Assets */
+.roulette-game-svg {
+  width: 86px;
+  height: 86px;
+  filter: drop-shadow(0 0 15px rgba(245, 181, 5, 0.7));
+}
+
+.roulette-pixel-img {
+  width: 86px;
+  height: 86px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 15px rgba(255, 51, 68, 0.7));
+}
+
+.boss-temple-svg {
+  width: 88px;
+  height: 88px;
+  filter: drop-shadow(0 0 20px rgba(157, 78, 221, 0.8));
+}
+
+/* ==========================================================================
+   HỆ THỐNG NÚT BẤM RPG 3D (RPGUI BEVELED BUTTONS)
+   ========================================================================== */
+/* Nút bấm vàng Hoàng Gia siêu cấp */
+.big-action-btn {
+  font-family: var(--font-fantasy);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #261600;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+  background: linear-gradient(180deg, #ffe58f 0%, #f5b505 40%, #c48700 100%);
+  border: 2px solid #fff2a8;
+  border-radius: 999px;
+  padding: 16px 36px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    inset 0 2px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.35),
+    0 6px 0 #7a4e00,
+    0 12px 25px rgba(245, 181, 5, 0.45);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.15s ease;
+}
+
+.big-action-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-25deg);
+  animation: buttonShimmer 3s infinite;
+}
+
+@keyframes buttonShimmer {
+  0%   { left: -100%; }
+  25%  { left: 200%; }
+  100% { left: 200%; }
+}
+
+.big-action-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: 
+    inset 0 2px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.35),
+    0 8px 0 #7a4e00,
+    0 16px 30px rgba(245, 181, 5, 0.6);
+}
+
+.big-action-btn:active {
+  transform: translateY(5px);
+  box-shadow: 
+    inset 0 2px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 1px 0 #7a4e00,
+    0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Nút Điều Khiển Khung Kim Loại RPG (.btn-ctrl) */
+.btn-ctrl {
+  background: linear-gradient(180deg, #283145 0%, #171d2b 100%);
+  border: 1px solid var(--border-gold);
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+    0 3px 0 #0d111a,
+    0 5px 12px rgba(0, 0, 0, 0.4);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.15s ease;
+}
+
+.btn-ctrl:hover {
+  border-color: #ffd700;
+  color: #ffd700;
+  transform: translateY(-1px);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+    0 4px 0 #0d111a,
+    0 7px 15px rgba(245, 181, 5, 0.25);
+}
+
+.btn-ctrl:active {
+  transform: translateY(2px);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 1px 0 #0d111a;
+}
+
+.btn-ctrl-primary {
+  background: linear-gradient(180deg, #573e0a 0%, #3a2804 100%);
+  border-color: #ffd700;
+  color: #ffd700;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 215, 0, 0.35),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+    0 3px 0 #201500,
+    0 6px 14px rgba(245, 181, 5, 0.3);
+}
+
+/* Nút Thứ Cấp (.btn-secondary-epic) */
+.btn-secondary-epic {
+  background: linear-gradient(180deg, #242a3a 0%, #141722 100%);
+  border: 1px solid var(--border-glass);
+  color: #ffffff;
+  font-family: var(--font-fantasy);
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 16px 32px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 4px 0 #090a0f,
+    0 8px 18px rgba(0, 0, 0, 0.5);
+  transition: transform 0.1s ease, border-color 0.15s ease;
+}
+
+.btn-secondary-epic:hover {
+  border-color: var(--border-gold);
+  color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.btn-secondary-epic:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #090a0f;
+}
+
+/* Nút Phán Quyết Ngọc Lục Bảo & Hồng Lựu (.btn-judge) */
+.btn-judge {
+  padding: 12px 22px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  white-space: nowrap;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.15s ease;
+}
+
+.btn-win {
+  background: linear-gradient(180deg, #38ef7d 0%, #11998e 100%);
+  border: 1px solid #7effa7;
+  color: #032313;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.35),
+    0 4px 0 #084c47,
+    0 8px 18px rgba(0, 230, 118, 0.4);
+}
+
+.btn-loss {
+  background: linear-gradient(180deg, #ff5252 0%, #c62828 100%);
+  border: 1px solid #ff8a80;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.4),
+    0 4px 0 #6d1010,
+    0 8px 18px rgba(255, 51, 68, 0.4);
+}
+
+.btn-judge:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.btn-judge:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+}
+
+/* Nút Phong Vương (.btn-crown-king) */
+.btn-crown-king {
+  background: linear-gradient(180deg, #443209 0%, #291d04 100%);
+  border: 1px solid var(--border-gold);
+  color: var(--gold-bright);
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 215, 0, 0.35),
+    0 3px 0 #140e01;
+  transition: transform 0.1s ease, filter 0.15s ease;
+}
+
+.btn-crown-king:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+
+.btn-crown-king:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #140e01;
+}
+
+/* ==========================================================================
+   THANH ĐIỀU HƯỚNG RPG & TRỤC BẢN ĐỒ VIỄN CHINH (QUEST MAP)
+   ========================================================================== */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  background: linear-gradient(180deg, rgba(16, 19, 28, 0.98) 0%, rgba(10, 12, 18, 0.96) 100%);
+  backdrop-filter: blur(14px);
+  border-bottom: 1.5px solid var(--border-gold);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8), 0 0 10px rgba(245, 181, 5, 0.12);
+  height: 44px;
+  min-height: 44px;
+  max-height: 44px;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.logo-area { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+.logo-badge {
+  font-family: var(--font-fantasy);
+  font-weight: 900;
+  font-size: 0.95rem;
+  color: var(--gold-bright);
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-shadow: 0 0 10px rgba(245, 181, 5, 0.5), 0 1px 2px #000;
+}
+
+.sub-badge {
+  font-size: 0.65rem;
+  background: rgba(0, 180, 216, 0.18);
+  color: var(--ice-accent);
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid rgba(144, 224, 239, 0.4);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+/* Stepper Bản Đồ Nhiệm Vụ */
+.round-stepper {
+  display: flex;
+  gap: 3px;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 2px 4px;
+  border-radius: 999px;
+  border: 1px solid var(--border-gold);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.8);
+  flex-shrink: 1;
+}
+
+.step-item {
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.step-item:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.step-item.active {
+  background: linear-gradient(180deg, #ffe27a 0%, #f5b505 100%);
+  color: #241600;
+  font-weight: 900;
+  box-shadow: 0 2px 8px rgba(245, 181, 5, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  transform: scale(1.03);
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* BỘ ĐIỀU KHIỂN SCALE / THU PHÓNG GIAO DIỆN (RPGUI GOLD FRAME) */
+.scale-ctrl-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid var(--border-gold);
+  border-radius: 6px;
+  padding: 1px 4px;
+  height: 28px;
+  box-sizing: border-box;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.scale-icon-symbol {
+  font-size: 0.75rem;
+  margin-right: 1px;
+}
+
+.scale-btn {
+  background: linear-gradient(180deg, #333d52 0%, #1a202c 100%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffd700;
+  font-size: 0.85rem;
+  font-weight: 900;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  transition: all 0.15s ease;
+}
+
+.scale-btn:hover {
+  border-color: var(--gold);
+  background: linear-gradient(180deg, #ffe27a 0%, #f5b505 100%);
+  color: #241600;
+}
+
+.scale-value {
+  font-family: var(--font-timer);
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffd700;
+  padding: 0 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.scale-value:hover {
+  text-decoration: underline;
+  color: #fff;
+}
+
+.scale-select {
+  background: rgba(10, 14, 22, 0.95);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  padding: 1px 2px;
+  height: 20px;
+}
+
+.scale-select option {
+  background: #10131d;
+  color: #fff;
+}
+
+.nav-btn {
+  background: linear-gradient(180deg, #242a3a 0%, #151924 100%);
+  border: 1px solid var(--border-glass);
+  color: var(--text-main);
+  padding: 2px 7px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 700;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  box-shadow: 0 1px 0 #0a0d14;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  box-sizing: border-box;
+}
+
+.nav-btn:hover {
+  border-color: var(--border-gold);
+  color: var(--gold-bright);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 0 #0a0d14, 0 0 8px rgba(245, 181, 5, 0.25);
+}
+
+.nav-btn:active { transform: translateY(1px); box-shadow: 0 1px 0 #0a0d14; }
+
+.nav-btn-highlight {
+  background: linear-gradient(180deg, #4d3606 0%, #2d1f02 100%);
+  border-color: var(--border-gold);
+  color: var(--gold-bright);
+}
+
+/* ==========================================================================
+   KHUNG CHÍNH & MÀN HÌNH
+   ========================================================================== */
+.app-container {
+  position: relative;
+  z-index: 10;
+  max-width: var(--app-max);
+  margin: 0 auto;
+  padding: 6px 14px 10px;
+  box-sizing: border-box;
+  transform-origin: top center;
+  transition: zoom 0.15s ease;
+}
+
+.screen { display: none; animation: rpgScreenFade 0.35s ease forwards; box-sizing: border-box; }
+.screen.active { display: block; }
+
+@keyframes rpgScreenFade {
+  from { opacity: 0; transform: translateY(8px) scale(0.995); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Tiêu đề màn hình */
+.screen-header {
+  text-align: center;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+
+.screen-title {
+  font-family: var(--font-fantasy);
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--gold-bright);
+  letter-spacing: 0.8px;
+  margin: 0 0 1px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-shadow: 0 0 12px rgba(245, 181, 5, 0.4), 0 2px 2px #000;
+}
+
+.screen-desc {
+  color: #cbd5e1;
+  font-size: 0.82rem;
+  max-width: 960px;
+  margin: 0 auto;
+  line-height: 1.3;
+}
+
+/* ==========================================================================
+   MÀN 0 — CỐT TRUYỆN HUYỀN THOẠI
+   ========================================================================== */
+.story-hero { text-align: center; padding: 20px; max-width: 1100px; margin: 0 auto; }
+
+.story-subtitle {
+  font-family: var(--font-fantasy);
+  color: var(--gold);
+  font-size: 1rem;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.story-title {
+  font-family: var(--font-fantasy);
+  font-size: 3.2rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+  text-shadow: 0 0 20px rgba(245, 181, 5, 0.4), 0 4px 4px #000;
+}
+
+.story-scroll-box {
+  padding: 36px 42px;
+  line-height: 1.8;
+  font-size: 1.15rem;
+  color: #f0f3f8;
+  text-align: justify;
+  margin-bottom: 30px;
+}
+
+.story-scroll-box::before {
+  content: "📜 CHIẾU THƯ NỮ THẦN";
+  position: absolute;
+  top: -16px;
+  left: 40px;
+  background: linear-gradient(180deg, #443209 0%, #201703 100%);
+  border: 1px solid var(--border-gold);
+  padding: 6px 20px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  border-radius: 999px;
+  color: var(--gold-bright);
+  letter-spacing: 2px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.story-scroll-box strong { color: var(--gold-bright); text-shadow: 0 0 8px rgba(245, 181, 5, 0.3); }
+.story-scroll-box em { color: var(--ice-accent); font-style: normal; font-weight: 700; }
+
+.story-actions-group { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+
+/* ==========================================================================
+   MÀN 1 — 4 ĐẠI GIA TỘC VƯƠNG QUỐC (ELEMENTAL RPG CRESTS)
+   ========================================================================== */
+#screen-1.active {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+}
+
+.kingdoms-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(8px, 1.2vw, 14px);
+  max-width: 1680px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.kingdom-card {
+  position: relative;
+  border-radius: 14px;
+  background: radial-gradient(circle at 50% 10%, rgba(20, 26, 40, 0.95) 0%, rgba(7, 9, 15, 0.98) 100%);
+  padding: 10px 11px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.85);
+  box-sizing: border-box;
+}
+
+.kingdom-card:hover {
+  transform: translateY(-2px);
+}
+
+/* ================= 4 HỆ NGUYÊN TỐ VỚI HIỆU ỨNG ÁNH SÁNG & BORDER SỐNG ĐỘNG ================= */
+.theme-fire {
+  border: 2px solid #ff7b00;
+  box-shadow: 0 0 16px rgba(255, 120, 0, 0.6), inset 0 0 20px rgba(255, 60, 0, 0.25);
+  animation: fireAuraPulse 3s ease-in-out infinite alternate;
+}
+@keyframes fireAuraPulse {
+  0% {
+    border-color: #ff9100;
+    box-shadow: 0 0 14px rgba(255, 100, 0, 0.5), inset 0 0 16px rgba(255, 50, 0, 0.2);
+  }
+  50% {
+    border-color: #ff3d00;
+    box-shadow: 0 0 24px rgba(255, 120, 0, 0.8), inset 0 0 24px rgba(255, 70, 0, 0.35);
+  }
+  100% {
+    border-color: #ffab00;
+    box-shadow: 0 0 18px rgba(255, 140, 0, 0.6), inset 0 0 18px rgba(255, 90, 0, 0.25);
+  }
+}
+
+.theme-ice {
+  border: 2px solid #00e5ff;
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.6), inset 0 0 20px rgba(0, 180, 255, 0.25);
+  animation: iceAuraPulse 3.5s ease-in-out infinite alternate;
+}
+@keyframes iceAuraPulse {
+  0% {
+    border-color: #00e5ff;
+    box-shadow: 0 0 14px rgba(0, 229, 255, 0.5), inset 0 0 16px rgba(0, 180, 255, 0.2);
+  }
+  50% {
+    border-color: #84ffff;
+    box-shadow: 0 0 24px rgba(0, 240, 255, 0.8), inset 0 0 24px rgba(0, 200, 255, 0.35);
+  }
+  100% {
+    border-color: #00b0ff;
+    box-shadow: 0 0 18px rgba(0, 200, 255, 0.6), inset 0 0 18px rgba(0, 160, 255, 0.25);
+  }
+}
+
+.theme-thunder {
+  border: 2px solid #b388ff;
+  box-shadow: 0 0 16px rgba(179, 136, 255, 0.6), inset 0 0 20px rgba(150, 90, 255, 0.25);
+  animation: thunderAuraPulse 2.4s ease-in-out infinite alternate;
+}
+@keyframes thunderAuraPulse {
+  0% {
+    border-color: #b388ff;
+    box-shadow: 0 0 14px rgba(179, 136, 255, 0.5), inset 0 0 16px rgba(140, 70, 255, 0.2);
+  }
+  50% {
+    border-color: #e040fb;
+    box-shadow: 0 0 24px rgba(224, 64, 251, 0.8), inset 0 0 24px rgba(180, 50, 255, 0.35);
+  }
+  100% {
+    border-color: #7c4dff;
+    box-shadow: 0 0 18px rgba(124, 77, 255, 0.6), inset 0 0 18px rgba(110, 60, 255, 0.25);
+  }
+}
+
+.theme-earth {
+  border: 2px solid #2ec4b6;
+  box-shadow: 0 0 16px rgba(46, 196, 182, 0.6), inset 0 0 20px rgba(0, 200, 150, 0.25);
+  animation: earthAuraPulse 4s ease-in-out infinite alternate;
+}
+@keyframes earthAuraPulse {
+  0% {
+    border-color: #2ec4b6;
+    box-shadow: 0 0 14px rgba(46, 196, 182, 0.5), inset 0 0 16px rgba(0, 190, 140, 0.2);
+  }
+  50% {
+    border-color: #00e676;
+    box-shadow: 0 0 24px rgba(0, 230, 118, 0.8), inset 0 0 24px rgba(0, 210, 130, 0.35);
+  }
+  100% {
+    border-color: #1de9b6;
+    box-shadow: 0 0 18px rgba(29, 233, 182, 0.6), inset 0 0 18px rgba(20, 200, 160, 0.25);
+  }
+}
+
+/* CARD TOP: PILL BADGE VÀ NÚT CHỌN VUA */
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3px;
+  flex-shrink: 0;
+}
+
+.kingdom-pill-badge {
+  font-family: var(--font-fantasy);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: #ffe082;
+  background: rgba(28, 20, 12, 0.88);
+  border: 1.5px solid rgba(255, 215, 0, 0.55);
+  border-radius: 9999px;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.btn-crown-king {
+  font-family: var(--font-fantasy);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(180deg, #443216 0%, #2a1f0d 100%);
+  border: 1.5px solid rgba(255, 215, 0, 0.6);
+  border-radius: 9999px;
+  padding: 2px 9px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+.btn-crown-king:hover {
+  background: linear-gradient(180deg, #664d1f 0%, #3d2d12 100%);
+  border-color: #ffd700;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  transform: scale(1.04);
+}
+.btn-crown-king .mini-crown-icon {
+  width: 13px;
+  height: 13px;
+}
+
+.kingdom-name {
+  font-family: var(--font-fantasy);
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 2px;
+  letter-spacing: 0.4px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 0;
+}
+
+.kingdom-crest-hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2px 0 5px;
+  min-height: 48px;
+  flex-shrink: 0;
+}
+
+.kingdom-crest-3d {
+  width: clamp(40px, 5.2vh, 52px);
+  height: clamp(40px, 5.2vh, 52px);
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+.kingdom-card:hover .kingdom-crest-3d {
+  transform: scale(1.08);
+}
+
+/* HUY HIỆU VECTOR 4 NGUYÊN TỐ PHÁT SÁNG THEO HỆ */
+.crest-fire {
+  filter: drop-shadow(0 0 10px #ff9100) drop-shadow(0 0 20px #ff3d00);
+  color: #ffb74d;
+}
+.crest-ice {
+  filter: drop-shadow(0 0 10px #00e5ff) drop-shadow(0 0 20px #00b0ff);
+  color: #80deea;
+}
+.crest-thunder {
+  filter: drop-shadow(0 0 10px #d500f9) drop-shadow(0 0 20px #7c4dff);
+  color: #ea80fc;
+}
+.crest-nature {
+  filter: drop-shadow(0 0 10px #00e676) drop-shadow(0 0 20px #1de9b6);
+  color: #69f0ae;
+}
+
+/* KHUNG PHONG VUA */
+.king-display-box {
+  background: linear-gradient(180deg, rgba(22, 28, 40, 0.75) 0%, rgba(10, 14, 20, 0.85) 100%);
+  border: 1.5px dashed rgba(255, 215, 0, 0.4);
+  border-radius: 7px;
+  padding: 4px 6px;
+  text-align: center;
+  margin-bottom: 5px;
+  flex-shrink: 0;
+}
+
+.king-display-box.is-crowned {
+  background: linear-gradient(180deg, rgba(46, 34, 14, 0.9) 0%, rgba(22, 16, 6, 0.95) 100%);
+  border: 1.5px solid #d4af37;
+  box-shadow: 0 0 10px rgba(245, 181, 5, 0.35);
+}
+
+.king-name-title {
+  font-family: var(--font-fantasy);
+  font-size: 1.02rem;
+  font-weight: 900;
+  color: #ffe082;
+  margin-bottom: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.king-name-title.unselected {
+  color: #94a3b8;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.king-subtitle {
+  font-size: 0.65rem;
+  color: #cbd5e1;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.pillars-sub-header {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #ffab91;
+  text-align: center;
+  margin-bottom: 3px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* 5 TRỤ CỘT SINH TỒN HÀNG NGANG */
+.pillars-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 3px;
+  margin-bottom: 5px;
+  flex-shrink: 0;
+}
+
+.pillar-item {
+  position: relative;
+  background: rgba(14, 18, 28, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 5px;
+  padding: 3px 1px 2px;
+  text-align: center;
+  min-height: 38px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pillar-game-svg, .pillar-pixel-img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  margin-bottom: 1px;
+  display: block;
+}
+
+.pillar-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.pillar-item.fatal::after {
+  content: "!";
+  position: absolute;
+  top: -4px;
+  right: -3px;
+  width: 13px;
+  height: 13px;
+  font-size: 0.65rem;
+  line-height: 13px;
+  text-align: center;
+  font-weight: 900;
+  color: #fff;
+  background: var(--crimson);
+  border-radius: 50%;
+  border: 1px solid #fff;
+  box-shadow: 0 0 5px var(--crimson);
+}
+
+.pillar-item.lost {
+  background: rgba(255, 51, 68, 0.16) !important;
+  border-color: var(--crimson) !important;
+  color: #ff8a80 !important;
+  text-decoration: line-through;
+  opacity: 0.55;
+  filter: grayscale(0.8);
+}
+
+.roster-sub-header {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #94a3b8;
+  margin-bottom: 3px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* GRID DÂN CƯ 2 CỘT */
+.roster-chips-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.member-chip {
+  background: rgba(14, 19, 30, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.member-chip.is-king {
+  border-color: #ffd700;
+  background: linear-gradient(180deg, rgba(60, 42, 14, 0.95) 0%, rgba(28, 18, 6, 0.98) 100%);
+  color: #ffe082;
+  font-weight: 800;
+  box-shadow: 0 0 8px rgba(245, 181, 5, 0.4);
+}
+
+.chip-king-badge {
+  font-size: 0.65rem;
+  color: #ffd700;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* NÚT BẮT ĐẦU VÒNG 1 DẠNG VIÊN THUỐC VÀNG KIM CỰC ĐẸP (THEO ẢNH 3) */
+.start-round-btn {
+  padding: 8px 32px;
+  font-family: var(--font-fantasy);
+  font-size: 0.98rem;
+  font-weight: 900;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #ffe066 0%, #f5b000 45%, #b87300 100%);
+  border: 2px solid #fff5a8;
+  color: #1a0f00;
+  box-shadow: 0 4px 18px rgba(245, 176, 0, 0.6), inset 0 1px 0 #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
+}
+.start-round-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 24px rgba(255, 190, 0, 0.85);
+}
+.start-round-btn:active {
+  transform: scale(0.97);
+}
+}
+.start-round-btn .btn-game-icon {
+  width: 18px;
+  height: 18px;
+}
+
+
+/* ==========================================================================
+   THANH MANA TIMER BAR RPG (THEO PHONG CÁCH RPGUI PROGRESS BAR)
+   ========================================================================== */
+.rpg-mana-track {
+  width: 100%;
+  height: 20px;
+  background: #080a10;
+  border: 2px solid var(--border-gold);
+  border-radius: 999px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 10px;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.9),
+    0 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.rpg-mana-fill {
+  height: 100%;
+  border-radius: 999px;
+  position: relative;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Trạng thái Mana đầy (>40%) — Xanh Lam Thần Bí */
+.rpg-mana-fill.mana-high {
+  background: linear-gradient(90deg, #0077b6 0%, #00b4d8 50%, #90e0ef 100%);
+  box-shadow: 0 0 14px rgba(0, 180, 216, 0.7), inset 0 2px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Trạng thái Mana trung bình (15% - 40%) — Vàng Hổ Phách */
+.rpg-mana-fill.mana-med {
+  background: linear-gradient(90deg, #c48700 0%, #f5b505 50%, #ffe27a 100%);
+  box-shadow: 0 0 14px rgba(245, 181, 5, 0.7), inset 0 2px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Trạng thái Mana cạn nguy cấp (<=15%) — Đỏ Cuồng Bạo Nhấp Nháy */
+.rpg-mana-fill.mana-low {
+  background: linear-gradient(90deg, #b71c1c 0%, #ff3344 50%, #ff8a80 100%);
+  box-shadow: 0 0 20px rgba(255, 51, 68, 0.9), inset 0 2px 0 rgba(255, 255, 255, 0.7);
+  animation: pulseManaRage 0.6s infinite alternate;
+}
+
+@keyframes pulseManaRage {
+  from { filter: brightness(1); }
+  to   { filter: brightness(1.3); }
+}
+
+/* ==========================================================================
+   MÀN 2 — ĐẤU TRƯỜNG VÒNG 1 (TỨ KẾT) & SIDEBAR
+   ========================================================================== */
+#screen-2.active,
+#screen-3.active {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: calc(100vh - 58px);
+  max-height: calc(100vh - 58px);
+  box-sizing: border-box;
+}
+
+.arena-layout-with-sidebar {
+  display: grid;
+  grid-template-columns: 210px 290px 1fr 290px;
+  gap: clamp(8px, 1.2vw, 14px);
+  align-items: stretch;
+  flex: 1;
+  min-height: 0;
+}
+
+@media (max-width: 1400px) {
+  .arena-layout-with-sidebar {
+    grid-template-columns: 190px 260px 1fr 260px !important;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .arena-layout-with-sidebar {
+    grid-template-columns: 1fr !important;
+    overflow-y: auto;
+  }
+}
+
+/* Sidebar Bảng 4 Nước (Biết Ai Bị Cook) */
+.kingdoms-sidebar-panel { padding: 10px 8px; overflow-y: auto; overflow-x: hidden; }
+
+.sidebar-title {
+  font-family: var(--font-fantasy);
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--gold-bright);
+  border-bottom: 2px solid var(--border-gold);
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kingdom-mini-card {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--border-glass);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+}
+
+.kingdom-mini-card:last-child { margin-bottom: 0; }
+
+.kingdom-mini-card.is-active-match {
+  border-color: var(--gold);
+  background: rgba(245, 181, 5, 0.1);
+  box-shadow: 0 0 14px rgba(245, 181, 5, 0.25);
+}
+
+.kingdom-mini-card.is-cooked {
+  border-color: var(--crimson);
+  background: rgba(255, 51, 68, 0.14);
+  opacity: 0.85;
+}
+
+.mini-card-header { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 8px; }
+
+.mini-card-name {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.status-tag {
+  font-size: 0.75rem;
+  font-weight: 900;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.status-tag-fighting { background: var(--gold); color: #201400; }
+.status-tag-waiting  { background: rgba(255, 255, 255, 0.12); color: var(--text-muted); }
+.status-tag-cooked   { background: var(--crimson); color: #fff; animation: pulseCooked 1s infinite alternate; }
+
+@keyframes pulseCooked { from { opacity: 0.8; } to { opacity: 1; filter: drop-shadow(0 0 6px var(--crimson)); } }
+
+.mini-pillars-row { display: flex; gap: 5px; margin-top: 8px; }
+
+.mini-p-dot {
+  flex: 1;
+  text-align: center;
+  font-size: 0.85rem;
+  padding: 4px 0;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+}
+
+.mini-p-dot.lost { opacity: 0.35; filter: grayscale(1); text-decoration: line-through; }
+
+/* Panels Đội A & Đội B */
+.side-team-panel {
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.side-team-panel .kingdom-badge-tag { display: inline-block; margin-bottom: 6px; }
+.side-team-panel .kingdom-name { margin-bottom: 4px; font-size: 1.05rem; }
+
+.side-team-panel.is-defeated {
+  opacity: 0.55;
+  filter: grayscale(0.5);
+  border-color: var(--crimson);
+}
+
+/* Hộp Triệu Hồi Dũng Sĩ */
+.hero-summon-box {
+  background: linear-gradient(180deg, rgba(0, 180, 216, 0.08) 0%, rgba(0, 0, 0, 0.5) 100%);
+  border: 1.5px dashed rgba(0, 180, 216, 0.5);
+  border-radius: 8px;
+  padding: 8px 6px;
+  text-align: center;
+  margin: 6px 0;
+  transition: all 0.2s ease;
+}
+
+.hero-summon-box.spinning {
+  border-color: var(--gold);
+  border-style: solid;
+  box-shadow: 0 0 15px rgba(245, 181, 5, 0.35);
+}
+
+.hero-reel-viewport {
+  height: 42px;
+  overflow: hidden;
+  position: relative;
+  background: #080a10;
+  border-radius: 6px;
+  border: 1px solid var(--border-gold);
+  margin-bottom: 6px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.9);
+}
+
+.hero-reel-viewport::before,
+.hero-reel-viewport::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; height: 10px;
+  z-index: 5;
+  pointer-events: none;
+}
+.hero-reel-viewport::before { top: 0; background: linear-gradient(180deg, #080a10, transparent); }
+.hero-reel-viewport::after  { bottom: 0; background: linear-gradient(0deg, #080a10, transparent); }
+
+.hero-reel-track {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateY(0);
+}
+
+.hero-reel-item {
+  height: 42px;
+  line-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-fantasy);
+  font-size: 1.22rem;
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hero-reel-item.selected {
+  color: var(--gold-bright);
+  font-size: 1.32rem;
+  text-shadow: 0 0 12px rgba(245, 181, 5, 0.6);
+}
+
+.hero-btn-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; }
+
+/* Lực Lượng Quân Số */
+.team-roster-section {
+  margin-top: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-glass);
+  border-radius: 8px;
+  padding: 8px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.roster-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--gold-bright);
+}
+
+.roster-count-badge {
+  background: rgba(245, 181, 5, 0.2);
+  border: 1px solid var(--border-gold);
+  color: var(--gold-bright);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.team-roster-list {
+  max-height: 180px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 4px;
+  flex: 1;
+}
+
+.team-roster-list::-webkit-scrollbar { width: 4px; }
+.team-roster-list::-webkit-scrollbar-thumb { background: var(--border-gold); border-radius: 4px; }
+
+.roster-member-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.82rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.roster-member-row.is-king {
+  background: rgba(245, 181, 5, 0.16);
+  border-color: var(--border-gold);
+  color: var(--gold-bright);
+  font-weight: 800;
+}
+
+.roster-member-row.is-casualty {
+  background: rgba(255, 51, 68, 0.16);
+  border-color: var(--crimson);
+  opacity: 0.65;
+  text-decoration: line-through;
+}
+
+.roster-member-row.is-active-fighter {
+  background: rgba(0, 180, 216, 0.2);
+  border-color: var(--ice-primary);
+  font-weight: 800;
+}
+
+.roster-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.tag-king     { background: var(--gold); color: #201400; }
+.tag-casualty { background: var(--crimson); color: #fff; }
+.tag-ready    { color: var(--green); }
+.tag-fighter  { background: var(--ice-primary); color: #021a24; }
+
+/* ==========================================================================
+   TRUNG TÂM & ĐỒNG HỒ ĐẾM NGƯỢC RPG
+   ========================================================================== */
+.center-arena {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  justify-content: space-between;
+}
+
+.timer-wrapper {
+  padding: 10px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.timer-wrapper > div:first-child {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.timer-display {
+  font-family: var(--font-timer);
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--gold-bright);
+  letter-spacing: 1px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 15px rgba(245, 181, 5, 0.6), 0 3px 2px #000;
+}
+
+.timer-display.urgent {
+  color: var(--crimson);
+  text-shadow: 0 0 20px rgba(255, 51, 68, 0.8), 0 3px 2px #000;
+  animation: pulseUrgentTimer 0.5s infinite alternate;
+}
+
+@keyframes pulseUrgentTimer {
+  from { transform: scale(1); }
+  to   { transform: scale(1.06); }
+}
+
+.timer-controls { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ==========================================================================
+   KHUNG CÂU HỎI & 4 PHƯƠNG ÁN A-B-C-D (THẺ BÀI TRI THỨC)
+   ========================================================================== */
+.question-box {
+  padding: 18px 22px;
+  min-height: 170px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.question-meta {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.question-meta span:first-child {
+  color: var(--gold-bright);
+  letter-spacing: 1px;
+  font-family: var(--font-fantasy);
+}
+
+.question-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 1.8vw, 1.55rem);
+  font-weight: 800;
+  line-height: 1.4;
+  color: #ffffff;
+  margin-bottom: 14px;
+  text-shadow: 0 2px 4px #000;
+}
+
+.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* Thẻ Đáp Án A-B-C-D Nổi Khối RPGUI */
+.option-btn {
+  background: linear-gradient(180deg, #242c3d 0%, #151a26 100%);
+  border: 1.5px solid var(--border-gold);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #ffffff;
+  font-size: clamp(0.92rem, 1.1vw, 1.08rem);
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.5),
+    0 3px 0 #0c0f17,
+    0 6px 14px rgba(0, 0, 0, 0.5);
+  transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.option-btn:hover {
+  border-color: #ffe27a;
+  transform: translateY(-2px);
+  filter: brightness(1.12);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 5px 0 #0c0f17,
+    0 10px 20px rgba(245, 181, 5, 0.3);
+}
+
+.option-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #0c0f17;
+}
+
+/* Huy hiệu chữ A, B, C, D mạ vàng dập nổi */
+.opt-badge {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffe58f 0%, #f5b505 50%, #b87c00 100%);
+  border: 2px solid #fff4b8;
+  color: #241600;
+  font-family: var(--font-fantasy);
+  font-size: 1.18rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 3px 6px rgba(0, 0, 0, 0.6);
+}
+
+.opt-text { flex: 1; }
+
+/* Trạng thái được chọn */
+.option-btn.selected {
+  border-color: #ffd700;
+  background: linear-gradient(180deg, #443209 0%, #201704 100%);
+  box-shadow: 0 0 20px rgba(245, 181, 5, 0.5), inset 0 0 12px rgba(245, 181, 5, 0.3);
+}
+
+/* Trạng thái Đáp Án ĐÚNG — Ngọc Lục Bảo Bừng Sáng */
+.option-btn.correct {
+  background: linear-gradient(180deg, #11998e 0%, #084c47 100%) !important;
+  border-color: #00e676 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 25px rgba(0, 230, 118, 0.7), inset 0 0 15px rgba(0, 230, 118, 0.4) !important;
+  animation: correctPulse 1.2s infinite alternate;
+}
+
+.option-btn.correct .opt-badge {
+  background: linear-gradient(180deg, #a7ffeb 0%, #00e676 100%);
+  border-color: #ffffff;
+  color: #022b17;
+}
+
+@keyframes correctPulse {
+  from { transform: scale(1); }
+  to   { transform: scale(1.02); }
+}
+
+/* Trạng thái Đáp Án SAI */
+.option-btn.wrong {
+  background: linear-gradient(180deg, #6d1010 0%, #2e0505 100%) !important;
+  border-color: var(--crimson) !important;
+  color: #ff8a80 !important;
+  opacity: 0.7;
+}
+
+/* Thanh Thao Tác MC / Host */
+.host-action-bar {
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.judge-group { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* ==========================================================================
+   OVERLAY GHÉP TRẬN (VS BATTLE SLAM CINEMATIC)
+   ========================================================================== */
+/* ==========================================================================
+   MÀN GHÉP TRẬN (VS) FANTASY RPG — THIẾT KẾ HUYỀN THOẠI 1:1
+   ========================================================================== */
+.matchup-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: radial-gradient(circle at center, rgba(14, 18, 30, 0.94) 0%, rgba(4, 5, 8, 0.98) 85%);
+  backdrop-filter: blur(14px);
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+}
+
+.matchup-overlay.active {
+  display: flex;
+  animation: rpgScreenFade 0.3s ease;
+}
+
+/* VÒNG TRÒN RUNE MA THUẬT QUAY CHẬM (ASTROLABE / MAGIC RUNE CIRCLE) */
+.matchup-rune-bg {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 880px; height: 880px;
+  margin-top: -440px;
+  margin-left: -440px;
+  background: url('assets/magic-rune-circle.svg') no-repeat center center;
+  background-size: contain;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.65;
+  animation: rotateRuneCircle 85s linear infinite;
+  filter: drop-shadow(0 0 45px rgba(245, 181, 5, 0.5));
+}
+
+@keyframes rotateRuneCircle {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.matchup-nebula-glow {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 1100px; height: 650px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse at 30% 50%, rgba(255, 110, 0, 0.18) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 50%, rgba(0, 190, 255, 0.18) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.matchup-container {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1080px;
+  gap: 24px;
+}
+
+/* KHUNG THẺ VƯƠNG QUỐC TRẬN ĐẤU */
+.matchup-side {
+  flex: 1;
+  max-width: 380px;
+  padding: 22px 22px 18px;
+  text-align: center;
+  border-radius: 16px;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.matchup-side.left  { animation: slideInLeft 0.5s cubic-bezier(0.2, 0.9, 0.3, 1); }
+.matchup-side.right { animation: slideInRight 0.5s cubic-bezier(0.2, 0.9, 0.3, 1); }
+
+@keyframes slideInLeft  { from { transform: translateX(-140px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes slideInRight { from { transform: translateX(140px);  opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* HOA VĂN GÓC THẺ BÀI */
+.matchup-card-filigree {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid rgba(255, 215, 0, 0.65);
+  pointer-events: none;
+}
+.matchup-side.theme-fire .matchup-card-filigree { border-color: rgba(255, 180, 0, 0.7); }
+.matchup-side.theme-ice .matchup-card-filigree { border-color: rgba(0, 229, 255, 0.7); }
+.matchup-side.theme-thunder .matchup-card-filigree { border-color: rgba(179, 136, 255, 0.7); }
+.matchup-side.theme-earth .matchup-card-filigree { border-color: rgba(46, 196, 182, 0.7); }
+.matchup-card-filigree.top-left  { top: 8px; left: 8px; border-right: none; border-bottom: none; border-top-left-radius: 6px; }
+.matchup-card-filigree.top-right { top: 8px; right: 8px; border-left: none; border-bottom: none; border-top-right-radius: 6px; }
+.matchup-card-filigree.btm-left  { bottom: 8px; left: 8px; border-right: none; border-top: none; border-bottom-left-radius: 6px; }
+.matchup-card-filigree.btm-right { bottom: 8px; right: 8px; border-left: none; border-top: none; border-bottom-right-radius: 6px; }
+
+/* HUY HIỆU & BIỂU TƯỢNG VƯƠNG QUỐC 3D */
+.matchup-crest {
+  height: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.matchup-crest-asset {
+  max-width: 85px;
+  max-height: 85px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.matchup-kingdom-name {
+  font-family: var(--font-fantasy);
+  font-size: 1.45rem;
+  font-weight: 900;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+  white-space: pre-line;
+}
+
+.matchup-king-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.king-crest-pip {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+/* ================= 4 HỆ NGUYÊN TỐ VƯƠNG QUỐC ================= */
+
+/* HỆ 1: HỎA LONG / RỒNG LỬA (THEME FIRE) */
+.matchup-side.theme-fire {
+  background: radial-gradient(circle at top center, rgba(46, 22, 10, 0.94) 0%, rgba(16, 8, 4, 0.97) 100%);
+  border: 2.5px solid #ff9d00;
+  box-shadow: 0 0 35px rgba(255, 120, 0, 0.6),
+              inset 0 0 32px rgba(255, 80, 0, 0.28),
+              0 8px 32px rgba(0, 0, 0, 0.85);
+}
+.matchup-side.theme-fire .matchup-crest-asset {
+  filter: drop-shadow(0 0 22px rgba(255, 140, 0, 0.95)) drop-shadow(0 0 45px rgba(255, 70, 0, 0.5));
+}
+.matchup-side.theme-fire .matchup-kingdom-name {
+  color: #ffe082;
+  text-shadow: 0 0 16px rgba(255, 160, 0, 0.7), 0 2px 4px #000;
+}
+.matchup-side.theme-fire .matchup-king-title {
+  color: #f0deb4;
+}
+.matchup-side.theme-fire .king-crest-pip {
+  color: #ffb300;
+}
+.matchup-side.theme-fire .matchup-hero-box {
+  background: linear-gradient(180deg, rgba(38, 25, 14, 0.92) 0%, rgba(18, 12, 8, 0.96) 100%);
+  border: 1.5px solid #c4881c;
+  box-shadow: inset 0 1px 0 rgba(255, 220, 100, 0.35), 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+.matchup-side.theme-fire .matchup-hero-label {
+  color: #ffca28;
+  text-shadow: 0 0 8px rgba(255, 193, 7, 0.6);
+}
+.matchup-side.theme-fire .hero-header-line {
+  background: linear-gradient(90deg, transparent, #c4881c, transparent);
+}
+.matchup-side.theme-fire .matchup-reel-viewport {
+  background: #0d0805;
+  border: 1.5px solid #8d5e11;
+}
+.matchup-side.theme-fire .matchup-reel-item.selected {
+  color: #ffe57f;
+  text-shadow: 0 0 14px rgba(255, 193, 7, 0.85);
+}
+
+/* HỆ 2: BĂNG VŨ / BĂNG PHONG (THEME ICE) */
+.matchup-side.theme-ice {
+  background: radial-gradient(circle at top center, rgba(14, 30, 52, 0.94) 0%, rgba(5, 12, 22, 0.97) 100%);
+  border: 2.5px solid #5ce1e6;
+  box-shadow: 0 0 35px rgba(0, 210, 255, 0.6),
+              inset 0 0 32px rgba(0, 180, 255, 0.25),
+              0 8px 32px rgba(0, 0, 0, 0.85);
+}
+.matchup-side.theme-ice .matchup-crest-asset {
+  filter: drop-shadow(0 0 22px rgba(92, 225, 230, 0.95)) drop-shadow(0 0 45px rgba(0, 160, 255, 0.5));
+}
+.matchup-side.theme-ice .matchup-kingdom-name {
+  color: #bbf2f6;
+  text-shadow: 0 0 16px rgba(0, 210, 255, 0.7), 0 2px 4px #000;
+}
+.matchup-side.theme-ice .matchup-king-title {
+  color: #cfebf5;
+}
+.matchup-side.theme-ice .king-crest-pip {
+  color: #00e5ff;
+}
+.matchup-side.theme-ice .matchup-hero-box {
+  background: linear-gradient(180deg, rgba(18, 36, 58, 0.92) 0%, rgba(8, 18, 30, 0.96) 100%);
+  border: 1.5px solid #3ca8c4;
+  box-shadow: inset 0 1px 0 rgba(160, 235, 255, 0.35), 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+.matchup-side.theme-ice .matchup-hero-label {
+  color: #80deea;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+}
+.matchup-side.theme-ice .hero-header-line {
+  background: linear-gradient(90deg, transparent, #3ca8c4, transparent);
+}
+.matchup-side.theme-ice .matchup-reel-viewport {
+  background: #040c14;
+  border: 1.5px solid #216a80;
+}
+.matchup-side.theme-ice .matchup-reel-item.selected {
+  color: #e0f7fa;
+  text-shadow: 0 0 14px rgba(0, 229, 255, 0.85);
+}
+
+/* HỆ 3: LÔI THẦN (THEME THUNDER) */
+.matchup-side.theme-thunder {
+  background: radial-gradient(circle at top center, rgba(34, 16, 50, 0.94) 0%, rgba(14, 6, 22, 0.97) 100%);
+  border: 2.5px solid #b388ff;
+  box-shadow: 0 0 35px rgba(179, 136, 255, 0.6),
+              inset 0 0 32px rgba(150, 90, 255, 0.25),
+              0 8px 32px rgba(0, 0, 0, 0.85);
+}
+.matchup-side.theme-thunder .matchup-crest-asset {
+  filter: drop-shadow(0 0 22px rgba(179, 136, 255, 0.95)) drop-shadow(0 0 45px rgba(124, 77, 255, 0.5));
+}
+.matchup-side.theme-thunder .matchup-kingdom-name {
+  color: #ede7f6;
+  text-shadow: 0 0 16px rgba(179, 136, 255, 0.7), 0 2px 4px #000;
+}
+.matchup-side.theme-thunder .matchup-king-title {
+  color: #e4d7f5;
+}
+.matchup-side.theme-thunder .king-crest-pip {
+  color: #b388ff;
+}
+.matchup-side.theme-thunder .matchup-hero-box {
+  background: linear-gradient(180deg, rgba(38, 20, 58, 0.92) 0%, rgba(18, 8, 30, 0.96) 100%);
+  border: 1.5px solid #8e5bd6;
+  box-shadow: inset 0 1px 0 rgba(220, 180, 255, 0.35), 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+.matchup-side.theme-thunder .matchup-hero-label {
+  color: #d1c4e9;
+  text-shadow: 0 0 8px rgba(179, 136, 255, 0.6);
+}
+.matchup-side.theme-thunder .hero-header-line {
+  background: linear-gradient(90deg, transparent, #8e5bd6, transparent);
+}
+.matchup-side.theme-thunder .matchup-reel-viewport {
+  background: #0f0717;
+  border: 1.5px solid #6330a8;
+}
+.matchup-side.theme-thunder .matchup-reel-item.selected {
+  color: #f3e5f5;
+  text-shadow: 0 0 14px rgba(179, 136, 255, 0.85);
+}
+
+/* HỆ 4: ĐỊA MẪU / ĐẤT MẸ (THEME EARTH) */
+.matchup-side.theme-earth {
+  background: radial-gradient(circle at top center, rgba(16, 42, 28, 0.94) 0%, rgba(6, 18, 12, 0.97) 100%);
+  border: 2.5px solid #2ec4b6;
+  box-shadow: 0 0 35px rgba(46, 196, 182, 0.6),
+              inset 0 0 32px rgba(0, 200, 150, 0.25),
+              0 8px 32px rgba(0, 0, 0, 0.85);
+}
+.matchup-side.theme-earth .matchup-crest-asset {
+  filter: drop-shadow(0 0 22px rgba(46, 196, 182, 0.95)) drop-shadow(0 0 45px rgba(0, 180, 120, 0.5));
+}
+.matchup-side.theme-earth .matchup-kingdom-name {
+  color: #cbf3eb;
+  text-shadow: 0 0 16px rgba(46, 196, 182, 0.7), 0 2px 4px #000;
+}
+.matchup-side.theme-earth .matchup-king-title {
+  color: #daf5ee;
+}
+.matchup-side.theme-earth .king-crest-pip {
+  color: #2ec4b6;
+}
+.matchup-side.theme-earth .matchup-hero-box {
+  background: linear-gradient(180deg, rgba(20, 50, 38, 0.92) 0%, rgba(10, 24, 18, 0.96) 100%);
+  border: 1.5px solid #26968c;
+  box-shadow: inset 0 1px 0 rgba(160, 245, 230, 0.35), 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+.matchup-side.theme-earth .matchup-hero-label {
+  color: #80cbc4;
+  text-shadow: 0 0 8px rgba(46, 196, 182, 0.6);
+}
+.matchup-side.theme-earth .hero-header-line {
+  background: linear-gradient(90deg, transparent, #26968c, transparent);
+}
+.matchup-side.theme-earth .matchup-reel-viewport {
+  background: #06140e;
+  border: 1.5px solid #17655e;
+}
+.matchup-side.theme-earth .matchup-reel-item.selected {
+  color: #e0f2f1;
+  text-shadow: 0 0 14px rgba(46, 196, 182, 0.85);
+}
+
+/* ================= KHUNG DŨNG SĨ RA TRẬN & REEL CUỘN DỌC ================= */
+.matchup-hero-box {
+  margin-top: 14px;
+  border-radius: 10px;
+  padding: 10px 14px 12px;
+}
+
+.matchup-hero-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.hero-header-line {
+  flex: 1;
+  height: 1px;
+}
+
+.matchup-hero-label {
+  font-family: var(--font-fantasy);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  white-space: nowrap;
+}
+
+.matchup-reel-viewport {
+  height: 46px;
+  overflow: hidden;
+  position: relative;
+  border-radius: 6px;
+}
+
+.matchup-reel-viewport::before,
+.matchup-reel-viewport::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; height: 12px;
+  z-index: 5;
+  pointer-events: none;
+}
+.matchup-reel-viewport::before { top: 0; background: linear-gradient(180deg, rgba(0, 0, 0, 0.8), transparent); }
+.matchup-reel-viewport::after  { bottom: 0; background: linear-gradient(0deg, rgba(0, 0, 0, 0.8), transparent); }
+
+.matchup-reel-track {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateY(0);
+}
+
+.matchup-reel-item {
+  height: 46px;
+  line-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-fantasy);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.matchup-reel-item.selected {
+  font-size: 1.42rem;
+}
+
+/* ================= KHU VỰC VS Ở GIỮA & 2 NÚT THAO TÁC ================= */
+.matchup-center-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  min-width: 250px;
+}
+
+.matchup-vs-wrap {
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.matchup-vs-img {
+  width: 105px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0 20px rgba(255, 80, 0, 0.7)) drop-shadow(0 0 20px rgba(0, 200, 255, 0.7));
+  animation: vsPulseImpact 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes vsPulseImpact {
+  0%   { transform: scale(1); filter: drop-shadow(0 0 16px rgba(255, 80, 0, 0.7)) drop-shadow(0 0 16px rgba(0, 200, 255, 0.7)); }
+  100% { transform: scale(1.06); filter: drop-shadow(0 0 28px rgba(255, 120, 0, 0.95)) drop-shadow(0 0 28px rgba(0, 220, 255, 0.95)); }
+}
+
+.matchup-center-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+/* 2 NÚT THIẾT KẾ DẠNG VIÊN THUỐC (PILL) THEO ẢNH MẪU */
+.matchup-pill-btn {
+  width: 100%;
+  max-width: 260px;
+  padding: 9px 18px;
+  border-radius: 9999px;
+  font-family: var(--font-main);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  user-select: none;
+}
+
+/* Nút trên: Roll Song Đấu màu vàng kim loại viền sáng */
+.matchup-pill-btn.roll-btn {
+  background: linear-gradient(180deg, #ffe066 0%, #f5b000 50%, #c48000 100%);
+  border: 2px solid #fff5a8;
+  color: #211300;
+  font-size: 0.92rem;
+  font-weight: 800;
+  box-shadow: 0 4px 18px rgba(245, 176, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+.matchup-pill-btn.roll-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 24px rgba(245, 176, 0, 0.85);
+  filter: brightness(1.08);
+}
+.matchup-pill-btn.roll-btn:active {
+  transform: scale(0.97);
+}
+
+/* Nút dưới: Xung Trận Ngay dạng tối viền vàng */
+.matchup-pill-btn.enter-btn {
+  background: linear-gradient(180deg, rgba(24, 28, 42, 0.95) 0%, rgba(10, 12, 18, 0.98) 100%);
+  border: 1.5px solid rgba(245, 181, 5, 0.55);
+  color: #f7eed8;
+  font-size: 0.86rem;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
+}
+.matchup-pill-btn.enter-btn:hover {
+  border-color: #ffd700;
+  color: #fff;
+  transform: scale(1.03);
+  box-shadow: 0 0 18px rgba(245, 181, 5, 0.4);
+}
+.matchup-pill-btn.enter-btn:active {
+  transform: scale(0.97);
+}
+
+.matchup-btn-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.timer-flair-icon {
+  width: 32px;
+  height: 32px;
+  vertical-align: middle;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px var(--gold));
+}
+
+.roulette-asset {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 14px var(--gold-bright));
+}
+
+
+/* ==========================================================================
+   MÀN 4 — VÒNG ANH HÙNG (THẺ BÀI HUY HIỆU TOP 1 2 3)
+   ========================================================================== */
+.hero-round-container { display: flex; flex-direction: column; gap: 16px; }
+
+.horizontal-lb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.horizontal-lb-title {
+  font-family: var(--font-fantasy);
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: var(--gold-bright);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hero-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+
+.hero-chip-card {
+  background: linear-gradient(180deg, #242c3d 0%, #151a26 100%);
+  border: 1px solid var(--border-gold);
+  border-radius: 12px;
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.hero-chip-card:hover {
+  transform: translateY(-3px);
+  border-color: #ffd700;
+  box-shadow: 0 8px 20px rgba(245, 181, 5, 0.3);
+}
+
+.hero-chip-card.active-speaker {
+  border-color: #00e676;
+  background: linear-gradient(180deg, #163628 0%, #0d2218 100%);
+  box-shadow: 0 0 20px rgba(0, 230, 118, 0.5);
+  transform: translateY(-3px);
+}
+
+.hero-chip-card.rank-1 {
+  border-color: #ffd700;
+  background: linear-gradient(180deg, #3d2d05 0%, #201702 100%);
+  box-shadow: 0 0 15px rgba(245, 181, 5, 0.4);
+}
+
+.hero-chip-rank { font-size: 0.85rem; font-weight: 800; color: var(--gold-bright); }
+
+.hero-chip-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin: 6px 0;
+  min-height: 2.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-chip-score {
+  font-family: var(--font-timer);
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--ice-accent);
+}
+
+/* ==========================================================================
+   MÀN 5 — ĐẤU BOSS NỮ THẦN
+   ========================================================================== */
+.boss-hero-banner {
+  text-align: center;
+  padding: 36px 20px;
+  background: radial-gradient(circle at center, rgba(157, 78, 221, 0.25) 0%, transparent 70%);
+}
+
+.boss-avatar-box {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  border: 2px solid var(--border-gold);
+  background: linear-gradient(180deg, #2a163d 0%, #11071c 100%);
+  box-shadow: 0 0 25px rgba(157, 78, 221, 0.5), inset 0 0 15px rgba(245, 181, 5, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4.5rem;
+  animation: pulseAvatar 2.5s infinite alternate ease-in-out;
+}
+
+@keyframes pulseAvatar {
+  from { transform: scale(1); filter: drop-shadow(0 0 10px rgba(157, 78, 221, 0.5)); }
+  to   { transform: scale(1.06); filter: drop-shadow(0 0 25px rgba(245, 181, 5, 0.7)); }
+}
+
+.boss-btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+.btn-boss-ending {
+  padding: 24px;
+  border-radius: 12px;
+  font-family: var(--font-fantasy);
+  font-size: 1.35rem;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.6), 0 12px 25px rgba(0, 0, 0, 0.5);
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.btn-boss-ending:hover { transform: translateY(-2px); filter: brightness(1.1); }
+.btn-boss-ending:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.6); }
+
+/* ==========================================================================
+   MODAL DIALOGS (VÒNG QUAY TRỪNG PHẠT, CHỌN ANH HÙNG, VIDEO, EDITOR)
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(3, 4, 7, 0.88);
+  backdrop-filter: blur(12px);
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.modal-overlay.active { display: flex; animation: rpgScreenFade 0.22s ease; }
+
+.punish-modal-content {
+  border-color: var(--crimson);
+  width: 92%;
+  max-width: 740px;
+  padding: 40px;
+  text-align: center;
+}
+
+.punish-roulette-box {
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px dashed var(--crimson);
+  border-radius: 14px;
+  padding: 30px;
+  margin: 26px 0;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.roulette-icon { font-size: 4.5rem; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(255, 51, 68, 0.5)); }
+.roulette-name { font-family: var(--font-fantasy); font-size: 2.2rem; font-weight: 900; color: var(--gold-bright); }
+.roulette-effect { font-size: 1.15rem; color: #fff; margin-top: 12px; font-weight: 700; line-height: 1.5; }
+
+.picker-modal-content { width: 92%; max-width: 800px; padding: 32px; max-height: 90vh; overflow-y: auto; }
+
+.picker-members-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  max-height: 420px;
+  overflow-y: auto;
+  margin: 22px 0;
+}
+
+.picker-member-btn {
+  background: linear-gradient(180deg, #242c3d 0%, #151a26 100%);
+  border: 1px solid var(--border-gold);
+  border-radius: 10px;
+  padding: 14px 18px;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.15s ease;
+}
+
+.picker-member-btn:hover {
+  background: linear-gradient(180deg, #443209 0%, #201704 100%);
+  border-color: #ffd700;
+  color: #ffd700;
+  transform: translateX(4px);
+}
+
+.video-modal-box {
+  background: #000;
+  border-radius: 16px;
+  overflow: hidden;
+  max-width: 1250px;
+  width: 96%;
+  border: 2px solid var(--border-gold);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #06070a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.cinematic-animated-stage { text-align: center; padding: 46px; }
+.cinematic-hero-icon { font-size: 5.5rem; margin-bottom: 22px; filter: drop-shadow(0 0 15px rgba(245, 181, 5, 0.5)); }
+.cinematic-title { font-family: var(--font-fantasy); font-size: 2.8rem; font-weight: 900; margin-bottom: 18px; }
+.cinematic-desc { font-size: 1.3rem; line-height: 1.7; color: #f0f3f8; max-width: 850px; margin: 0 auto; }
+
+.editor-modal-content {
+  width: 96%;
+  max-width: 1040px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+}
+
+.editor-body { overflow-y: auto; padding: 18px 8px; }
+.form-group { margin-bottom: 20px; }
+.form-label { display: block; font-size: 0.95rem; font-weight: 800; color: var(--gold-bright); margin-bottom: 8px; }
+
+.form-input, .form-textarea {
+  width: 100%;
+  background: #090b12;
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+}
+
+.form-input:focus, .form-textarea:focus { outline: none; border-color: #ffd700; box-shadow: 0 0 10px rgba(245, 181, 5, 0.35); }
+.form-textarea { min-height: 100px; resize: vertical; line-height: 1.5; }
+
+/* ==========================================================================
+   TIỆN ÍCH MÀU SẮC
+   ========================================================================== */
+.text-gold    { color: var(--gold-bright); }
+.text-cyan    { color: var(--ice-accent); }
+.text-crimson { color: var(--crimson); }
+.text-green   { color: var(--green); }
+
+/* ==========================================================================
+   TỐI ƯU HÓA RESPONSIVE & MÀN HÌNH MÁY CHIẾU LỚP HỌC
+   ========================================================================== */
+@media (max-width: 1440px) {
+  .top-nav {
+    padding: 0 6px;
+    gap: 3px;
+  }
+  .logo-badge { font-size: 0.86rem; gap: 4px; }
+  .logo-title-text { font-size: 0.86rem; }
+  .sub-badge { display: none; }
+  .round-stepper { gap: 1px; padding: 1px 2px; }
+  .step-item { padding: 2px 5px; font-size: 0.67rem; }
+  .header-controls { gap: 2px; }
+  .scale-ctrl-wrapper { padding: 1px 2px; gap: 1px; }
+  .scale-btn { width: 18px; height: 18px; font-size: 0.75rem; }
+  .scale-value { font-size: 0.65rem; padding: 0 2px; }
+  .scale-select { font-size: 0.62rem; max-width: 68px; }
+  .nav-btn { padding: 2px 5px; font-size: 0.67rem; gap: 2px; }
+}
+
+@media (max-width: 1200px) {
+  .nav-btn .btn-label { display: none; }
+  .nav-btn { padding: 2px 6px; }
+  .logo-title-text { font-size: 0.82rem; }
+}

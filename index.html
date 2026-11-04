@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ĐẠI CHIẾN VẬN MỆNH - HÀNH TINH HN12A10</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Montserrat:wght@500;600;700;800;900&family=Philosopher:ital,wght@0,700;1,700&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ================= CANVAS HIỆU ỨNG RPG ================= -->
+  <canvas id="ambient-magic-canvas"></canvas>
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <header class="top-nav">
+    <div class="logo-area">
+      <div class="logo-badge">
+        <img src="assets/icons/swords.svg" class="nav-game-icon" alt="">
+        <span class="logo-title-text">ĐẠI CHIẾN VẬN MỆNH</span>
+      </div>
+      <div class="sub-badge">HÀNH TINH HN12A10</div>
+    </div>
+
+    <!-- Stepper Navigation -->
+    <nav class="round-stepper">
+      <div class="step-item" onclick="Game.switchScreen(0)" title="Cốt Truyện Huyền Thoại">0. Cốt Truyện</div>
+      <div class="step-item active" onclick="Game.switchScreen(1)" title="Bốn Vương Quốc & Lễ Phong Vua">1. 4 Vương Quốc</div>
+      <div class="step-item" onclick="Game.switchScreen(2)" title="Vòng 1: Tứ Kết Đấu Loại">2. Vòng 1 (Tứ Kết)</div>
+      <div class="step-item" onclick="Game.switchScreen(3)" title="Vòng 2: Chung Kết Đối Đầu">3. Vòng 2 (Chung Kết)</div>
+      <div class="step-item" onclick="Game.switchScreen(4)" title="Vòng 3: Đấu Trường Anh Hùng">4. Vòng Anh Hùng</div>
+      <div class="step-item" onclick="Game.switchScreen(5)" title="Vòng Cuối: Phán Quyết Nữ Thần">5. Đấu Boss</div>
+    </nav>
+
+    <div class="header-controls">
+      <!-- Bộ điều khiển Scale / Thu Phóng Giao Diện Chuyên Nghiệp -->
+      <div class="scale-ctrl-wrapper" title="Thu phóng giao diện (Tự động fit màn hình hoặc tùy chỉnh)">
+        <span class="scale-icon-symbol">🔍</span>
+        <button class="scale-btn" onclick="Game.changeScale(-0.05)" title="Thu nhỏ (Ctrl + -)">−</button>
+        <span class="scale-value" id="ui-scale-badge" onclick="Game.resetScale()" title="Nhấn để Auto-Fit vừa màn hình (100vh)">Auto</span>
+        <button class="scale-btn" onclick="Game.changeScale(0.05)" title="Phóng to (Ctrl + +)">+</button>
+        <select id="scale-preset-select" class="scale-select" onchange="Game.setScale(this.value)" title="Chọn tỷ lệ zoom màn hình">
+          <option value="auto">Auto (100vh)</option>
+          <option value="0.75">75%</option>
+          <option value="0.80">80%</option>
+          <option value="0.85">85%</option>
+          <option value="0.90">90%</option>
+          <option value="0.95">95%</option>
+          <option value="1.00">100% (Chuẩn)</option>
+          <option value="1.05">105%</option>
+          <option value="1.10">110%</option>
+          <option value="1.15">115%</option>
+          <option value="1.20">120% (Máy chiếu)</option>
+        </select>
+      </div>
+
+      <button class="nav-btn nav-btn-highlight" onclick="Game.openMediaModal()" title="Cài đặt video & clip">
+        <img src="assets/icons/magic-slot.png" class="mini-pixel-icon" alt="">
+        <span class="btn-label">Video</span>
+      </button>
+      <button class="nav-btn" onclick="Game.triggerMatchupAnimation()" title="Xem hiệu ứng ghép trận">
+        <img src="assets/icons/swords.svg" class="mini-game-icon" alt="">
+        <span class="btn-label">Ghép Trận</span>
+      </button>
+      <button class="nav-btn" id="btn-audio" onclick="Game.toggleAudio()" title="Bật/Tắt âm thanh">
+        <img src="assets/icons/speaker.svg" class="mini-game-icon" id="audio-icon" alt="">
+        <span class="btn-label" id="audio-text">Âm thanh</span>
+      </button>
+      <button class="nav-btn" onclick="Game.toggleFullScreen()" title="Toàn màn hình (F11)">
+        <img src="assets/icons/expand.svg" class="mini-game-icon" alt="">
+        <span class="btn-label">Toàn màn</span>
+      </button>
+      <button class="nav-btn" onclick="Game.openEditor()" title="Chỉnh sửa câu hỏi & thành viên">
+        <img src="assets/icons/cog.svg" class="mini-game-icon" alt="">
+        <span class="btn-label">Cài Đặt</span>
+      </button>
+      <button class="nav-btn" onclick="Game.resetAllData()" style="color: var(--crimson);" title="Cài lại trò chơi">
+        <img src="assets/icons/cross.svg" class="mini-game-icon" alt="">
+        <span class="btn-label">Cài Lại</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= MAIN APP CONTAINER ================= -->
+  <main class="app-container">
+
+    <!-- ================= SCREEN 0: CỐT TRUYỆN ================= -->
+    <section id="screen-0" class="screen">
+      <div class="story-hero">
+        <div class="story-subtitle">THIÊN ANH HÙNG CA HỌC ĐƯỜNG</div>
+        <h1 class="story-title">ĐẠI CHIẾN VẬN MỆNH HN12A10</h1>
+
+        <div class="story-scroll-box">
+          <p>Ngày xửa ngày xưa, trong vũ trụ bao la có một hành tinh thanh bình mang tên <strong>HN12A10</strong>. Con người nơi đây sống trong ấm no nhờ nguồn năng lượng thần thánh được <strong>Nữ Thần</strong> bảo hộ và trấn giữ tại ngôi đền cổ thiêng liêng.</p>
+          <br>
+          <p>Nhưng rồi, một kẻ ngu ngốc vì tham vọng quyền năng tột đỉnh đã lẻn vào trộm mất nguồn năng lượng ấy. Cơn thịnh nộ của Nữ Thần giáng xuống, chia cắt hành tinh thành <strong>4 Vương quốc (4 Tổ)</strong>. Chiến tranh tranh giành quyền lực bùng nổ giữa 4 quốc gia...</p>
+          <br>
+          <p>Vào khoảnh khắc nguy cấp, Nữ Thần tái hiện và ban chiếu thư: <em>"Nếu các ngươi khao khát chiến đấu, ta sẽ mở ra Đại Chiến Vận Mệnh! Quốc gia sống sót cuối cùng sẽ nhận được của cải, quyền năng. Và vị Anh Hùng xuất chúng nhất sẽ bước lên đền thờ diện kiến ta để phán quyết số phận tương lai của toàn cõi thế giới!"</em></p>
+        </div>
+
+        <div class="story-actions-group">
+          <button class="btn-secondary-epic" onclick="Game.playCinematic('INTRO')">
+            <img src="assets/icons/magic-slot.png" class="btn-pixel-icon" alt=""> CHIẾU CLIP INTRO ▶
+          </button>
+          <button class="big-action-btn" onclick="Game.switchScreen(1)">
+            <img src="assets/icons/swords.svg" class="btn-game-icon" alt=""> BƯỚC VÀO CHIẾN TRƯỜNG ➔
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ================= SCREEN 1: 4 VƯƠNG QUỐC & PHONG VUA ================= -->
+    <section id="screen-1" class="screen active">
+      <div class="screen-header">
+        <h2 class="screen-title"><img src="assets/icons/crown.svg" style="width: 22px; height: 22px; vertical-align: middle;" alt=""> BỐN VƯƠNG QUỐC & LỄ PHONG VUA</h2>
+        <p class="screen-desc">Mỗi tổ sở hữu 5 Trụ Cột Sinh Tồn (Lãnh thổ, Của cải, Vũ khí mất là <strong>THUA NGAY!</strong>). Chọn 1 Vua cai trị. Vua được miễn đấu và cộng điểm sẵn!</p>
+      </div>
+
+      <div class="kingdoms-grid" id="kingdoms-setup-grid">
+        <!-- Render 4 Kingdom Cards dynamically via JS -->
+      </div>
+
+      <div style="text-align: center; margin-top: 8px;">
+        <button class="start-round-btn" onclick="Game.startRound1WithMatchup()">
+          <img src="assets/icons/swords.svg" class="btn-game-icon" alt="">
+          <span>BẮT ĐẦU VÒNG 1: TỨ KẾT ĐẤU LOẠI ➔</span>
+        </button>
+      </div>
+    </section>
+
+
+    <!-- ================= SCREEN 2: VÒNG 1 (TỨ KẾT ĐẤU LOẠI) ================= -->
+    <section id="screen-2" class="screen">
+      <!-- Selector chọn cặp đấu -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <span style="font-weight: 800; color: var(--gold); font-size: 1rem;">CHỌN TRẬN ĐẤU:</span>
+          <button class="btn-ctrl" id="tab-match-a" onclick="Game.setMatch('1vs2')">Nhánh 1: Tổ 1 vs Tổ 2</button>
+          <button class="btn-ctrl" id="tab-match-b" onclick="Game.setMatch('3vs4')">Nhánh 2: Tổ 3 vs Tổ 4</button>
+          <button class="btn-ctrl btn-ctrl-primary" onclick="Game.summonBothHeroes()" title="Triệu hồi dũng sĩ cả 2 bên cùng lúc với 2 dãy cuộn dọc từ trên xuống">
+            <img src="assets/icons/dice.svg" class="mini-game-icon" alt=""> Roll Song Đấu (2 Bên)
+          </button>
+          <button class="btn-ctrl" onclick="Game.triggerMatchupAnimation()" title="Chiếu lại hiệu ứng ghép trận">
+            <img src="assets/icons/swords.svg" class="mini-game-icon" alt=""> Xem Ghép Trận
+          </button>
+        </div>
+        <div style="font-size: 1rem; color: var(--ice-primary); font-weight: 700;">
+          TIẾN TRÌNH: <span id="r1-progress">Câu 1 / 5</span>
+        </div>
+      </div>
+
+      <!-- Layout 4 cột: [Bảng tổng sắp 4 Vương quốc] [Đội A] [Khung đấu] [Đội B] -->
+      <div class="arena-layout-with-sidebar">
+        
+        <!-- BẢNG TỔNG SẮP 4 VƯƠNG QUỐC (ẢNH 3: THEO DÕI AI BỊ COOK) -->
+        <aside class="kingdoms-sidebar-panel">
+          <div class="sidebar-title">
+            <span style="display: flex; align-items: center; gap: 8px;">
+              <img src="assets/icons/shield.png" class="mini-game-icon" alt=""> CẢI THẾ 4 NƯỚC
+            </span>
+            <span style="font-size: 0.72rem; color: var(--gold);">AI BỊ COOK?</span>
+          </div>
+          <div id="all-kingdoms-sidebar-list">
+            <!-- Render danh sách 4 vương quốc & tình trạng trụ cột -->
+          </div>
+        </aside>
+
+        <!-- ĐỘI A -->
+        <div class="side-team-panel" id="r1-panel-teamA">
+          <div class="kingdom-badge-tag" id="r1-teamA-badge">TỔ 1</div>
+          <h3 class="kingdom-name" id="r1-teamA-name">Tổ 1</h3>
+          <div class="king-privilege" id="r1-teamA-king"><img src="assets/icons/crown.svg" class="mini-crown-icon" alt=""> Vua: Đang chọn...</div>
+
+          <div class="hero-summon-box" id="r1-teamA-box">
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px;">ĐẠI DIỆN RA TRẬN</div>
+            <!-- CUỘN DỌC TỪ TRÊN XUỐNG DỪNG Ở DŨNG SĨ -->
+            <div class="hero-reel-viewport" id="r1-reel-viewport-A">
+              <div class="hero-reel-track" id="r1-reel-track-A">
+                <div class="hero-reel-item selected" id="r1-teamA-hero">Chưa triệu hồi</div>
+              </div>
+            </div>
+            <div class="hero-btn-actions">
+              <button class="btn-ctrl" style="font-size: 0.75rem; padding: 6px;" onclick="Game.summonHero('A')">
+                <img src="assets/icons/dice.svg" class="mini-game-icon" alt=""> Roll A
+              </button>
+              <button class="btn-ctrl btn-ctrl-primary" style="font-size: 0.75rem; padding: 6px;" onclick="Game.openManualHeroPicker('A')">
+                <img src="assets/icons/scroll.svg" class="mini-game-icon" alt=""> BTC Chọn
+              </button>
+            </div>
+          </div>
+
+          <div style="font-size: 0.75rem; color: var(--gold); margin-bottom: 4px; font-weight: 800;">5 TRỤ CỘT SINH TỒN:</div>
+          <div class="pillars-container" id="r1-teamA-pillars"></div>
+
+          <!-- DANH SÁCH THÀNH VIÊN VƯƠNG QUỐC ĐANG THI ĐẤU (BIẾT AI BỊ LOẠI KHI -50% QUÂN) -->
+          <div class="team-roster-section" id="r1-teamA-roster-section">
+            <div class="roster-header">
+              <span class="roster-title"><img src="assets/icons/swords.svg" class="mini-game-icon" alt=""> LỰC LƯỢNG:</span>
+              <span class="roster-count-badge" id="r1-teamA-roster-count">8/8</span>
+            </div>
+            <div class="team-roster-list" id="r1-teamA-roster-list">
+              <!-- Render danh sách thành viên & ai bị loại -->
+            </div>
+          </div>
+        </div>
+
+        <!-- KHU VỰC THI ĐẤU Ở GIỮA -->
+        <div class="center-arena">
+          <!-- Đồng hồ -->
+          <div class="timer-wrapper">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <img src="assets/icons/magic-slot.png" class="timer-flair-icon" alt="">
+              <div class="timer-display" id="r1-timer">60</div>
+            </div>
+            <!-- Thanh Mana Timer Bar RPG -->
+            <div class="rpg-mana-track" title="Năng Lượng Thời Gian">
+              <div class="rpg-mana-fill mana-high" id="r1-mana-bar" style="width: 100%;"></div>
+            </div>
+            <div class="timer-controls">
+              <button class="btn-ctrl" onclick="Game.startTimer(60)">▶ Chạy</button>
+              <button class="btn-ctrl" onclick="Game.pauseTimer()">⏸ Dừng</button>
+              <button class="btn-ctrl" onclick="Game.resetTimer(60)">↺ Đặt Lại</button>
+            </div>
+          </div>
+
+          <!-- Khung câu hỏi -->
+          <div class="question-box" id="r1-question-box">
+            <div>
+              <div class="question-meta">
+                <span id="r1-question-tag">CÂU HỎI TỨ KẾT</span>
+                <span style="color: var(--gold);">Thời gian: 60 giây</span>
+              </div>
+              <div class="question-text" id="r1-question-text">Đang tải nội dung câu hỏi...</div>
+            </div>
+
+            <!-- 4 Phương án A B C D -->
+            <div class="options-grid" id="r1-options-grid">
+              <!-- Render 4 nút options -->
+            </div>
+          </div>
+
+          <!-- Thanh phán quyết của Người dẫn chương trình -->
+          <div class="host-action-bar">
+            <button class="btn-ctrl" onclick="Game.revealAnswerR1()"><img src="assets/icons/eye.svg" class="mini-game-icon" alt=""> Hiện Đáp Án</button>
+            <div class="judge-group">
+              <button class="btn-judge btn-win" onclick="Game.judgeR1('A_WIN')">
+                <img src="assets/icons/check.svg" class="mini-game-icon" alt=""> Bên A Đúng (Phạt B)
+              </button>
+              <button class="btn-judge btn-loss" onclick="Game.judgeR1('B_WIN')">
+                <img src="assets/icons/check.svg" class="mini-game-icon" alt=""> Bên B Đúng (Phạt A)
+              </button>
+            </div>
+            <button class="btn-ctrl" onclick="Game.nextQuestionR1()">Câu Tiếp ➔</button>
+          </div>
+        </div>
+
+        <!-- ĐỘI B -->
+        <div class="side-team-panel" id="r1-panel-teamB">
+          <div class="kingdom-badge-tag" id="r1-teamB-badge">TỔ 2</div>
+          <h3 class="kingdom-name" id="r1-teamB-name">Tổ 2</h3>
+          <div class="king-privilege" id="r1-teamB-king"><img src="assets/icons/crown.svg" class="mini-crown-icon" alt=""> Vua: Đang chọn...</div>
+
+          <div class="hero-summon-box" id="r1-teamB-box">
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px;">ĐẠI DIỆN RA TRẬN</div>
+            <!-- CUỘN DỌC TỪ TRÊN XUỐNG DỪNG Ở DŨNG SĨ -->
+            <div class="hero-reel-viewport" id="r1-reel-viewport-B">
+              <div class="hero-reel-track" id="r1-reel-track-B">
+                <div class="hero-reel-item selected" id="r1-teamB-hero">Chưa triệu hồi</div>
+              </div>
+            </div>
+            <div class="hero-btn-actions">
+              <button class="btn-ctrl" style="font-size: 0.75rem; padding: 6px;" onclick="Game.summonHero('B')">
+                <img src="assets/icons/dice.svg" class="mini-game-icon" alt=""> Roll B
+              </button>
+              <button class="btn-ctrl btn-ctrl-primary" style="font-size: 0.75rem; padding: 6px;" onclick="Game.openManualHeroPicker('B')">
+                <img src="assets/icons/scroll.svg" class="mini-game-icon" alt=""> BTC Chọn
+              </button>
+            </div>
+          </div>
+
+          <div style="font-size: 0.75rem; color: var(--gold); margin-bottom: 4px; font-weight: 800;">5 TRỤ CỘT SINH TỒN:</div>
+          <div class="pillars-container" id="r1-teamB-pillars"></div>
+
+          <!-- DANH SÁCH THÀNH VIÊN VƯƠNG QUỐC ĐANG THI ĐẤU (BIẾT AI BỊ LOẠI KHI -50% QUÂN) -->
+          <div class="team-roster-section" id="r1-teamB-roster-section">
+            <div class="roster-header">
+              <span class="roster-title"><img src="assets/icons/swords.svg" class="mini-game-icon" alt=""> LỰC LƯỢNG:</span>
+              <span class="roster-count-badge" id="r1-teamB-roster-count">8/8</span>
+            </div>
+            <div class="team-roster-list" id="r1-teamB-roster-list">
+              <!-- Render danh sách thành viên & ai bị loại -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nút chuyển sang Vòng 2 sau khi có 2 đội thắng -->
+      <div style="text-align: center; margin-top: 16px;">
+        <button class="big-action-btn" onclick="Game.proceedToRound2()">
+          <img src="assets/icons/swords.svg" class="btn-game-icon" alt=""> BƯỚC VÀO VÒNG 2: CHUNG KẾT ĐÚNG / SAI ➔
+        </button>
+      </div>
+    </section>
+
+
+    <!-- ================= SCREEN 3: VÒNG 2 (CHUNG KẾT ĐÚNG / SAI) ================= -->
+    <section id="screen-3" class="screen">
+      <div class="screen-header">
+        <h2 class="screen-title"><img src="assets/icons/shield.png" class="title-game-icon" alt=""> VÒNG 2: CHUNG KẾT VƯƠNG QUỐC</h2>
+        <p class="screen-desc">2 Tổ Thắng Tranh Hùng! 4 Câu Hỏi Đúng / Sai (2 phút / câu). Tìm ra Tổ Vô Địch Toàn Năng!</p>
+      </div>
+
+      <div class="arena-layout-with-sidebar" style="grid-template-columns: 360px 1fr 360px;">
+        <!-- Đội Vô địch Nhánh 1 -->
+        <div class="side-team-panel" id="r2-panel-teamA">
+          <div class="kingdom-badge-tag">QUÁN QUÂN NHÁNH 1</div>
+          <h3 class="kingdom-name" id="r2-teamA-name">Tổ Thắng 1</h3>
+          <div class="king-privilege" id="r2-teamA-king"><img src="assets/icons/crown.svg" class="mini-crown-icon" alt=""> Vua: ...</div>
+          
+          <div class="hero-summon-box" id="r2-teamA-box">
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px;">ĐẠI DIỆN ĐẤU CÂU NÀY</div>
+            <div class="hero-reel-viewport" id="r2-reel-viewport-A">
+              <div class="hero-reel-track" id="r2-reel-track-A">
+                <div class="hero-reel-item selected" id="r2-teamA-hero">Chưa chọn</div>
+              </div>
+            </div>
+            <div class="hero-btn-actions">
+              <button class="btn-ctrl" style="font-size: 0.75rem; padding: 6px;" onclick="Game.summonHeroR2('A')"><img src="assets/icons/dice.svg" class="mini-game-icon" alt=""> Roll A</button>
+              <button class="btn-ctrl btn-ctrl-primary" style="font-size: 0.75rem; padding: 6px;" onclick="Game.openManualHeroPickerR2('A')"><img src="assets/icons/scroll.svg" class="mini-game-icon" alt=""> BTC Chọn</button>
+            </div>
+          </div>
+          <div style="font-size: 1.6rem; font-weight: 900; text-align: center; color: var(--gold); margin-top: 10px;" id="r2-score-teamA">0 Điểm</div>
+          
+          <!-- DANH SÁCH LỰC LƯỢNG QUÂN SỐ VÒNG 2 -->
+          <div class="team-roster-section" id="r2-teamA-roster-section">
+            <div class="roster-header">
+              <span class="roster-title"><img src="assets/icons/swords.svg" class="mini-game-icon" alt=""> LỰC LƯỢNG:</span>
+              <span class="roster-count-badge" id="r2-teamA-roster-count">8/8</span>
+            </div>
+            <div class="team-roster-list" id="r2-teamA-roster-list"></div>
+          </div>
+        </div>
+
+        <!-- Khung thi đấu Đúng / Sai -->
+        <div class="center-arena">
+          <div class="timer-wrapper">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <img src="assets/icons/magic-slot.png" class="timer-flair-icon" alt="">
+              <div class="timer-display" id="r2-timer">120</div>
+            </div>
+            <!-- Thanh Mana Timer Bar RPG -->
+            <div class="rpg-mana-track" title="Năng Lượng Thời Gian">
+              <div class="rpg-mana-fill mana-high" id="r2-mana-bar" style="width: 100%;"></div>
+            </div>
+            <div class="timer-controls">
+              <button class="btn-ctrl" onclick="Game.startTimer(120)">▶ Chạy</button>
+              <button class="btn-ctrl" onclick="Game.pauseTimer()">⏸ Dừng</button>
+              <button class="btn-ctrl" onclick="Game.resetTimer(120)">↺ Đặt Lại</button>
+            </div>
+          </div>
+
+          <div class="question-box">
+            <div>
+              <div class="question-meta">
+                <span id="r2-progress">CÂU HỎI 1 / 4 (ĐÚNG HOẶC SAI)</span>
+                <span style="color: var(--gold);">Thời gian: 2 phút</span>
+              </div>
+              <div class="question-text" id="r2-question-text">Nội dung câu hỏi vòng 2...</div>
+            </div>
+
+            <!-- Nút Đúng / Sai -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 15px 0;">
+              <button class="btn-judge btn-win" id="r2-btn-true" style="padding: 22px; font-size: 1.4rem; justify-content: center;" onclick="Game.selectTF(true)">
+                <span><img src="assets/icons/check.svg" class="mini-game-icon" alt=""> ĐÚNG</span>
+              </button>
+              <button class="btn-judge btn-loss" id="r2-btn-false" style="padding: 22px; font-size: 1.4rem; justify-content: center;" onclick="Game.selectTF(false)">
+                <span><img src="assets/icons/cross.svg" class="mini-game-icon" alt=""> SAI</span>
+              </button>
+            </div>
+            <div id="r2-explain-box" style="margin-top: 10px; font-size: 1rem; color: var(--ice-primary); display: none; line-height: 1.5;"></div>
+          </div>
+
+          <!-- Thanh điều khiển Host -->
+          <div class="host-action-bar">
+            <button class="btn-ctrl" onclick="Game.revealAnswerR2()"><img src="assets/icons/eye.svg" class="mini-game-icon" alt=""> Xem Kết Quả Đúng/Sai</button>
+            <div class="judge-group">
+              <button class="btn-judge btn-win" onclick="Game.addScoreR2('A')">+1 Đội A</button>
+              <button class="btn-judge btn-win" onclick="Game.addScoreR2('B')">+1 Đội B</button>
+            </div>
+            <button class="btn-ctrl" onclick="Game.nextQuestionR2()">Câu Tiếp ➔</button>
+          </div>
+        </div>
+
+        <!-- Đội Vô địch Nhánh 2 -->
+        <div class="side-team-panel" id="r2-panel-teamB">
+          <div class="kingdom-badge-tag">QUÁN QUÂN NHÁNH 2</div>
+          <h3 class="kingdom-name" id="r2-teamB-name">Tổ Thắng 2</h3>
+          <div class="king-privilege" id="r2-teamB-king"><img src="assets/icons/crown.svg" class="mini-crown-icon" alt=""> Vua: ...</div>
+          
+          <div class="hero-summon-box" id="r2-teamB-box">
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 4px;">ĐẠI DIỆN ĐẤU CÂU NÀY</div>
+            <div class="hero-reel-viewport" id="r2-reel-viewport-B">
+              <div class="hero-reel-track" id="r2-reel-track-B">
+                <div class="hero-reel-item selected" id="r2-teamB-hero">Chưa chọn</div>
+              </div>
+            </div>
+            <div class="hero-btn-actions">
+              <button class="btn-ctrl" style="font-size: 0.75rem; padding: 6px;" onclick="Game.summonHeroR2('B')"><img src="assets/icons/dice.svg" class="mini-game-icon" alt=""> Roll B</button>
+              <button class="btn-ctrl btn-ctrl-primary" style="font-size: 0.75rem; padding: 6px;" onclick="Game.openManualHeroPickerR2('B')"><img src="assets/icons/scroll.svg" class="mini-game-icon" alt=""> BTC Chọn</button>
+            </div>
+          </div>
+          <div style="font-size: 1.6rem; font-weight: 900; text-align: center; color: var(--gold); margin-top: 10px;" id="r2-score-teamB">0 Điểm</div>
+
+          <!-- DANH SÁCH LỰC LƯỢNG QUÂN SỐ VÒNG 2 -->
+          <div class="team-roster-section" id="r2-teamB-roster-section">
+            <div class="roster-header">
+              <span class="roster-title"><img src="assets/icons/swords.svg" class="mini-game-icon" alt=""> LỰC LƯỢNG:</span>
+              <span class="roster-count-badge" id="r2-teamB-roster-count">8/8</span>
+            </div>
+            <div class="team-roster-list" id="r2-teamB-roster-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 16px;">
+        <button class="big-action-btn" onclick="Game.proceedToHeroRound()">
+          <img src="assets/icons/lightning.svg" class="btn-game-icon" alt=""> TIẾN VÀO VÒNG ANH HÙNG (NỘI CHIẾN TỔ THẮNG) ➔
+        </button>
+      </div>
+    </section>
+
+
+    <!-- ================= SCREEN 4: VÒNG ANH HÙNG (REDESIGN BỐ CỤC ẢNH 5) ================= -->
+    <section id="screen-4" class="screen">
+      <div class="screen-header">
+        <h2 class="screen-title"><img src="assets/icons/lightning.svg" class="title-game-icon" alt=""> VÒNG ANH HÙNG: ĐẨY NHANH TỐC ĐỘ</h2>
+        <p class="screen-desc">10 câu hỏi chớp nhoáng (30s/câu). Đúng +1 điểm. Người cao điểm nhất sẽ bước lên diện kiến Nữ Thần!</p>
+      </div>
+
+      <div class="hero-round-container">
+        
+        <!-- BẢNG XẾP HẠNG NGANG DÀNH CHO CẢ LỚP (ẢNH 5: BỐ CỤC MỚI) -->
+        <div class="hero-horizontal-leaderboard">
+          <div class="horizontal-lb-header">
+            <div class="horizontal-lb-title">
+              <span><img src="assets/icons/trophy.svg" class="mini-game-icon" alt=""> BẢNG TỔNG SẮP ANH HÙNG:</span>
+              <span id="hero-team-label" style="color: var(--ice-primary); font-size: 1rem;">Tổ Vô Địch</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-ctrl" style="font-size: 0.8rem; padding: 6px 12px;" onclick="Game.randomTurnHero()">
+                <img src="assets/icons/dice.svg" class="mini-game-icon" alt=""> Random Người Trả Lời
+              </button>
+              <span style="font-size: 0.8rem; color: var(--text-muted); align-self: center;">
+                <img src="assets/icons/torch.svg" class="mini-game-icon" alt=""> <em>Click trực tiếp vào thẻ anh hùng để chỉ định!</em>
+              </span>
+            </div>
+          </div>
+
+          <!-- Grid thẻ anh hùng ngang -->
+          <div class="hero-cards-grid" id="hero-roster-cards">
+            <!-- Render dynamic hero chips -->
+          </div>
+        </div>
+
+        <!-- KHUNG THI ĐẤU Ở GIỮA -->
+        <div class="center-arena" style="max-width: 1280px; margin: 0 auto; width: 100%;">
+          <div class="timer-wrapper">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <img src="assets/icons/lightning.svg" class="timer-flair-icon" alt="">
+              <div class="timer-display" id="r3-timer">30</div>
+            </div>
+            <!-- Thanh Mana Timer Bar RPG -->
+            <div class="rpg-mana-track" title="Năng Lượng Thời Gian">
+              <div class="rpg-mana-fill mana-high" id="r3-mana-bar" style="width: 100%;"></div>
+            </div>
+            <div class="timer-controls">
+              <button class="btn-ctrl" onclick="Game.startTimer(30)">▶ Chạy</button>
+              <button class="btn-ctrl" onclick="Game.pauseTimer()">⏸ Dừng</button>
+              <button class="btn-ctrl" onclick="Game.resetTimer(30)">↺ Đặt Lại</button>
+            </div>
+          </div>
+
+          <div class="question-box">
+            <div>
+              <div class="question-meta">
+                <span id="r3-progress">CÂU HỎI 1 / 10 (CHỚP NHOÁNG)</span>
+                <span style="color: var(--crimson); font-weight: 800;">30 GIÂY / CÂU (+1 ĐIỂM)</span>
+              </div>
+              <div class="question-text" id="r3-question-text">Đang tải câu hỏi chớp nhoáng...</div>
+            </div>
+
+            <!-- Ô đáp án tham khảo cho Host -->
+            <div style="background: rgba(0, 0, 0, 0.45); border-radius: 12px; padding: 12px 15px; margin-top: 10px; border: 1px dashed var(--border-gold);">
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">ĐÁP ÁN THAM KHẢO CHO NGƯỜI CHẤM:</div>
+              <div id="r3-answer-hint" style="font-size: 1.35rem; font-weight: 800; color: var(--gold); display: none;">...</div>
+              <button class="btn-ctrl" id="btn-show-r3-ans" style="margin-top: 4px; font-size: 0.82rem;" onclick="Game.revealAnswerR3()">
+                <img src="assets/icons/eye.svg" class="mini-game-icon" alt=""> Mở Đáp Án
+              </button>
+            </div>
+          </div>
+
+          <!-- Thanh chấm điểm cho anh hùng -->
+          <div class="host-action-bar">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-weight: 700;">Đang trả lời:</span>
+              <span id="r3-current-speaker" style="color: var(--ice-primary); font-weight: 800; font-size: 1.2rem;">Chưa chỉ định</span>
+            </div>
+            <div class="judge-group">
+              <button class="btn-judge btn-win" onclick="Game.awardHeroPoint(1)">+1 ĐIỂM (ĐÚNG)</button>
+              <button class="btn-judge btn-loss" onclick="Game.awardHeroPoint(0)">0 ĐIỂM (SAI)</button>
+            </div>
+            <button class="btn-ctrl" onclick="Game.nextQuestionR3()">Câu Tiếp ➔</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 16px;">
+        <button class="big-action-btn" onclick="Game.proceedToBossWithCutscene()">
+          <img src="assets/icons/crown.svg" class="btn-game-icon" alt=""> XƯỚNG TÊN ĐẠI ANH HÙNG & BƯỚC VÀO VÒNG BOSS ➔
+        </button>
+      </div>
+    </section>
+
+
+    <!-- ================= SCREEN 5: ĐẤU BOSS NỮ THẦN ================= -->
+    <section id="screen-5" class="screen">
+      <div class="boss-hero-banner">
+        <div class="boss-avatar-box"><img src="assets/icons/temple.svg" class="boss-temple-svg" alt="Nữ Thần"></div>
+        <h2 style="font-family: var(--font-fantasy); font-size: 2.3rem; color: var(--thunder-accent); text-shadow: 0 0 20px var(--thunder-glow);">
+          PHÁN QUYẾT TỐI THƯỢNG CỦA NỮ THẦN HN12A10
+        </h2>
+        <p style="color: #cbd5e1; font-size: 1.15rem; margin-top: 8px;">
+          Đại Anh Hùng Đại Diện Toàn Cõi Nhân Loại: <span id="boss-champion-name" style="font-size: 1.45rem; font-weight: 900; color: var(--gold);">Đang xác định...</span>
+        </p>
+      </div>
+
+      <div style="max-width: 1120px; margin: 0 auto;">
+        <!-- Timer 5 phút -->
+        <div class="timer-wrapper" style="margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <img src="assets/icons/torch.svg" class="timer-flair-icon" alt="">
+            <div class="timer-display" id="boss-timer">05:00</div>
+          </div>
+          <!-- Thanh Mana Timer Bar RPG -->
+          <div class="rpg-mana-track" title="Năng Lượng Thời Gian">
+            <div class="rpg-mana-fill mana-high" id="boss-mana-bar" style="width: 100%;"></div>
+          </div>
+          <div class="timer-controls">
+            <button class="btn-ctrl" onclick="Game.startTimer(300, true)">▶ Chạy 5 Phút</button>
+            <button class="btn-ctrl" onclick="Game.pauseTimer()">⏸ Dừng</button>
+            <button class="btn-ctrl" onclick="Game.resetTimer(300, true)">↺ Đặt Lại</button>
+          </div>
+        </div>
+
+        <!-- Khung câu hỏi tự luận -->
+        <div class="boss-essay-card">
+          <div style="font-size: 0.85rem; color: var(--gold); letter-spacing: 2px; font-weight: 800; margin-bottom: 12px;">
+            <img src="assets/icons/scroll.svg" class="mini-game-icon" alt=""> CÂU HỎI TỰ LUẬN TỐI THƯỢNG (5 PHÚT)
+          </div>
+          <div class="question-text" id="boss-question-text" style="font-size: 1.35rem; line-height: 1.6;">
+            Nội dung câu hỏi tự luận phán quyết...
+          </div>
+          <div style="margin-top: 20px; font-size: 0.95rem; color: var(--text-muted); font-style: italic;" id="boss-instructions">
+            Đại Anh Hùng có 5 phút suy nghĩ và thuyết trình trước toàn thể hội đồng Nữ thần và các vương quốc.
+          </div>
+        </div>
+
+        <!-- 2 Nút Kết cục: Thắng / Thua -->
+        <div class="boss-btn-grid">
+          <button class="btn-boss-ending boss-win" onclick="Game.playCinematic('WIN')">
+            <img src="assets/icons/trophy.svg" class="btn-game-icon" alt="">
+            <span>THẮNG CUỘC: THẾ GIỚI ĐƯỢC CỨU</span>
+          </button>
+          <button class="btn-boss-ending boss-lose" onclick="Game.playCinematic('LOSE')">
+            <img src="assets/icons/skull.svg" class="btn-game-icon" alt="">
+            <span>THẤT BẠI: HÀNH TINH BỊ HUỶ DIỆT</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ================= OVERLAY: GHÉP TRẬN (VS) FANTASY (KẾT HỢP REEL CUỘN DỌC SONG ĐẤU) ================= -->
+  <div class="matchup-overlay" id="matchup-modal" onclick="Game.closeMatchupAnimation()">
+    <!-- VÒNG TRÒN RUNE MA THUẬT QUAY TRÒN (ASTROLABE / MAGIC RUNE CIRCLE) -->
+    <div class="matchup-rune-bg"></div>
+    <div class="matchup-nebula-glow"></div>
+
+    <div class="matchup-container" onclick="event.stopPropagation()">
+      <!-- BÊN TRÁI: VƯƠNG QUỐC A -->
+      <div class="matchup-side left theme-fire" id="matchup-side-A">
+        <div class="matchup-card-filigree top-left"></div>
+        <div class="matchup-card-filigree top-right"></div>
+        <div class="matchup-card-filigree btm-left"></div>
+        <div class="matchup-card-filigree btm-right"></div>
+        <div class="matchup-crest" id="matchup-crest-A">
+          <img src="assets/icons/crest-dragon.svg" class="matchup-crest-asset" alt="Rồng Lửa">
+        </div>
+        <div class="matchup-kingdom-name" id="matchup-name-A">Tổ 1 - Vương Quốc Rồng Lửa</div>
+        <div class="matchup-king-title" id="matchup-king-A">
+          <span class="king-crest-pip">⊚</span> Vua: Đỗ Minh Đức
+        </div>
+
+        <!-- CUỘN DỌC DŨNG SĨ VƯƠNG QUỐC A -->
+        <div class="matchup-hero-box" id="matchup-box-A">
+          <div class="matchup-hero-header">
+            <span class="hero-header-line"></span>
+            <span class="matchup-hero-label">DŨNG SĨ RA TRẬN</span>
+            <span class="hero-header-line"></span>
+          </div>
+          <div class="matchup-reel-viewport" id="matchup-reel-viewport-A">
+            <div class="matchup-reel-track" id="matchup-reel-track-A">
+              <div class="matchup-reel-item selected" id="matchup-hero-A">Chưa chọn</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ở GIỮA: VS & NÚT ĐIỀU KHIỂN (FIRE & ICE SPLIT EMBLEM + GOLD PILL BUTTONS) -->
+      <div class="matchup-center-col">
+        <div class="matchup-vs-wrap">
+          <img src="assets/icons/vs-emblem.svg" class="matchup-vs-img" alt="VS">
+        </div>
+        <div class="matchup-center-actions">
+          <button class="matchup-pill-btn roll-btn" id="btn-matchup-roll" onclick="Game.rollMatchupReels()">
+            <img src="assets/icons/dice.svg" class="matchup-btn-icon" alt="">
+            <span>Roll Song Đấu (2 Dãy Dọc)</span>
+          </button>
+          <button class="matchup-pill-btn enter-btn" onclick="Game.closeMatchupAnimation()">
+            <img src="assets/icons/swords.svg" class="matchup-btn-icon" alt="">
+            <span>Xung Trận Ngay ➔</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- BÊN PHẢI: VƯƠNG QUỐC B -->
+      <div class="matchup-side right theme-ice" id="matchup-side-B">
+        <div class="matchup-card-filigree top-left"></div>
+        <div class="matchup-card-filigree top-right"></div>
+        <div class="matchup-card-filigree btm-left"></div>
+        <div class="matchup-card-filigree btm-right"></div>
+        <div class="matchup-crest" id="matchup-crest-B">
+          <img src="assets/icons/crest-ice.svg" class="matchup-crest-asset" alt="Băng Phong">
+        </div>
+        <div class="matchup-kingdom-name" id="matchup-name-B">Tổ 2 - Vương Quốc Băng Phong</div>
+        <div class="matchup-king-title" id="matchup-king-B">
+          <span class="king-crest-pip">⊚</span> Vua: Trương Thảo My
+        </div>
+
+        <!-- CUỘN DỌC DŨNG SĨ VƯƠNG QUỐC B -->
+        <div class="matchup-hero-box" id="matchup-box-B">
+          <div class="matchup-hero-header">
+            <span class="hero-header-line"></span>
+            <span class="matchup-hero-label">⚡ DŨNG SĨ RA TRẬN</span>
+            <span class="hero-header-line"></span>
+          </div>
+          <div class="matchup-reel-viewport" id="matchup-reel-viewport-B">
+            <div class="matchup-reel-track" id="matchup-reel-track-B">
+              <div class="matchup-reel-item selected" id="matchup-hero-B">Chưa chọn</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= MODAL: CHỌN ANH HÙNG THỦ CÔNG (ẢNH 4) ================= -->
+  <div class="modal-overlay" id="modal-hero-picker">
+    <div class="picker-modal-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 12px;">
+        <h3 style="font-family: var(--font-fantasy); font-size: 1.4rem; color: var(--gold);">
+          <img src="assets/icons/scroll.svg" class="mini-game-icon" alt=""> BAN TỔ CHỨC CHỌN ANH HÙNG RA TRẬN
+        </h3>
+        <button class="btn-ctrl" onclick="Game.closeManualHeroPicker()">✕</button>
+      </div>
+
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 10px;">
+        Vui lòng chọn 1 thành viên đại diện cho <strong id="picker-team-name" style="color: var(--gold);">...</strong>:
+      </p>
+
+      <div class="picker-members-grid" id="picker-members-list">
+        <!-- Render danh sách thành viên -->
+      </div>
+
+      <div style="text-align: right; margin-top: 12px;">
+        <button class="btn-ctrl" onclick="Game.closeManualHeroPicker()">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= MODAL: VÒNG QUAY TRỪNG PHẠT 5 YẾU TỐ ================= -->
+  <div class="modal-overlay" id="modal-punishment">
+    <div class="punish-modal-content">
+      <h3 style="font-family: var(--font-fantasy); font-size: 1.9rem; color: var(--crimson); display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <img src="assets/icons/lightning.svg" class="title-game-icon" alt=""> SẤM CHỚP TRỪNG PHẠT NỮ THẦN <img src="assets/icons/lightning.svg" class="title-game-icon" alt="">
+      </h3>
+      <p style="color: #cbd5e1; margin-top: 6px;">
+        Đội <span id="punish-team-target" style="font-weight: 800; color: var(--gold);">Tổ X</span> trả lời SAI và phải chịu sự trừng phạt của số mệnh!
+      </p>
+
+      <div class="punish-roulette-box" id="roulette-box">
+        <div class="roulette-icon" id="roulette-icon"><img src="assets/icons/dice.svg" class="roulette-asset" alt=""></div>
+        <div class="roulette-name" id="roulette-name">Bấm để quay...</div>
+        <div class="roulette-effect" id="roulette-effect">1 trong 5 Trụ Cột Sinh Tồn sẽ bị tước đoạt!</div>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button class="big-action-btn" id="btn-spin-punish" style="font-size: 1.1rem; padding: 12px 28px;" onclick="Game.executeSpinPunishment()">
+          <img src="assets/icons/dice.svg" class="btn-game-icon" alt=""> QUAY SỐ MỆNH
+        </button>
+        <button class="btn-ctrl" id="btn-close-punish" style="display: none;" onclick="Game.closePunishmentModal()">
+          Đóng và Tiếp tục
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= MODAL: CINEMATIC VIDEO & CUTSCENES (INTRO / PRE-BOSS / ENDING) ================= -->
+  <div class="modal-overlay" id="modal-cinematic">
+    <div class="video-modal-box">
+      <div style="display: flex; justify-content: space-between; padding: 12px 20px; background: var(--bg-space); border-bottom: 1px solid var(--border-glass);">
+        <span id="cinematic-modal-title" style="font-weight: 800; color: var(--gold); font-family: var(--font-fantasy); font-size: 1.15rem;">
+          <img src="assets/icons/scroll.svg" class="mini-game-icon" alt=""> CỐT TRUYỆN HUYỀN THOẠI
+        </span>
+        <button class="btn-ctrl" style="padding: 4px 12px;" onclick="Game.closeCinematicModal()">✕ Bỏ qua</button>
+      </div>
+
+      <div class="video-container" id="cinematic-container">
+        <!-- Chứa video MP4 hoặc hoạt cảnh hoạt họa 3D tùy chỉnh -->
+      </div>
+
+      <div style="padding: 12px 20px; background: var(--bg-deep); display: flex; justify-content: space-between; align-items: center;">
+        <div style="font-size: 0.85rem; color: var(--text-muted);" id="cinematic-footer-hint">
+          <img src="assets/icons/torch.svg" class="mini-game-icon" alt=""> Bạn có thể cài đặt video MP4 từ máy tính trong menu "Video & Clip"!
+        </div>
+        <button class="btn-ctrl" onclick="Game.closeCinematicModal()">⏭ Bỏ qua / Tiếp tục Game</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= MODAL: QUẢN LÝ VIDEO & CLIP (BTC UPLOAD) ================= -->
+  <div class="modal-overlay" id="modal-media-manager">
+    <div class="editor-modal-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 14px;">
+        <h3 style="font-family: var(--font-fantasy); font-size: 1.5rem; color: var(--gold);">
+          <img src="assets/icons/magic-slot.png" class="mini-pixel-icon" alt=""> CÀI ĐẶT VIDEO & CLIP CỐT TRUYỆN (4 VIDEO)
+        </h3>
+        <button class="btn-ctrl" onclick="Game.closeMediaModal()">✕ Đóng</button>
+      </div>
+
+      <div class="editor-body">
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 18px;">
+          Bạn có thể chọn file video MP4 từ máy tính cho từng phân đoạn bên dưới. 
+          Nếu không chọn video, trò chơi sẽ <strong>tự động chạy hoạt cảnh Cinematic đồ họa huyền ảo</strong> tương ứng!
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+          <!-- Clip 1: Intro -->
+          <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); border-radius: 12px; padding: 16px;">
+            <div style="font-weight: 800; color: var(--gold); margin-bottom: 6px;">1. Clip Cốt Truyện Mở Đầu (Intro)</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;" id="status-video-intro">Trạng thái: Hoạt cảnh Cinematic mặc định</div>
+            <div style="display: flex; gap: 8px;">
+              <label class="btn-ctrl" style="cursor: pointer; font-size: 0.82rem;">
+                <img src="assets/icons/scroll.svg" class="mini-game-icon" alt=""> Chọn Video MP4
+                <input type="file" accept="video/*" style="display: none;" onchange="Game.handleVideoUpload(event, 'INTRO')">
+              </label>
+              <button class="btn-ctrl" style="font-size: 0.82rem;" onclick="Game.playCinematic('INTRO')">▶ Xem Thử</button>
+            </div>
+          </div>
+
+          <!-- Clip 2: Pre-Boss -->
+          <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); border-radius: 12px; padding: 16px;">
+            <div style="font-weight: 800; color: var(--thunder-accent); margin-bottom: 6px;">2. Clip Trước Khi Đấu Nữ Thần (Pre-Boss)</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;" id="status-video-preboss">Trạng thái: Hoạt cảnh Cinematic mặc định</div>
+            <div style="display: flex; gap: 8px;">
+              <label class="btn-ctrl" style="cursor: pointer; font-size: 0.82rem;">
+                <img src="assets/icons/scroll.svg" class="mini-game-icon" alt=""> Chọn Video MP4
+                <input type="file" accept="video/*" style="display: none;" onchange="Game.handleVideoUpload(event, 'PRE_BOSS')">
+              </label>
+              <button class="btn-ctrl" style="font-size: 0.82rem;" onclick="Game.playCinematic('PRE_BOSS')">▶ Xem Thử</button>
+            </div>
+          </div>
+
+          <!-- Clip 3: Ending WIN -->
+          <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); border-radius: 12px; padding: 16px;">
+            <div style="font-weight: 800; color: var(--green); margin-bottom: 6px;">3. Clip Kết Cục Thắng (Ending WIN)</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;" id="status-video-win">Trạng thái: Hoạt cảnh Cinematic mặc định</div>
+            <div style="display: flex; gap: 8px;">
+              <label class="btn-ctrl" style="cursor: pointer; font-size: 0.82rem;">
+                <img src="assets/icons/scroll.svg" class="mini-game-icon" alt=""> Chọn Video MP4
+                <input type="file" accept="video/*" style="display: none;" onchange="Game.handleVideoUpload(event, 'WIN')">
+              </label>
+              <button class="btn-ctrl" style="font-size: 0.82rem;" onclick="Game.playCinematic('WIN')">▶ Xem Thử</button>
+            </div>
+          </div>
+
+          <!-- Clip 4: Ending LOSE -->
+          <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); border-radius: 12px; padding: 16px;">
+            <div style="font-weight: 800; color: var(--crimson); margin-bottom: 6px;">4. Clip Kết Cục Thua (Ending LOSE)</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;" id="status-video-lose">Trạng thái: Hoạt cảnh Cinematic mặc định</div>
+            <div style="display: flex; gap: 8px;">
+              <label class="btn-ctrl" style="cursor: pointer; font-size: 0.82rem;">
+                <img src="assets/icons/scroll.svg" class="mini-game-icon" alt=""> Chọn Video MP4
+                <input type="file" accept="video/*" style="display: none;" onchange="Game.handleVideoUpload(event, 'LOSE')">
+              </label>
+              <button class="btn-ctrl" style="font-size: 0.82rem;" onclick="Game.playCinematic('LOSE')">▶ Xem Thử</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: right; border-top: 1px solid var(--border-glass); padding-top: 14px; margin-top: 14px;">
+        <button class="btn-ctrl btn-ctrl-primary" onclick="Game.closeMediaModal()">Hoàn Tất</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= MODAL: CÀI ĐẶT CÂU HỎI & THÀNH VIÊN ================= -->
+  <div class="modal-overlay" id="modal-editor">
+    <div class="editor-modal-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 14px;">
+        <h3 style="font-family: var(--font-fantasy); font-size: 1.4rem; color: var(--gold);">
+          <img src="assets/icons/cog.svg" class="mini-game-icon" alt=""> CÀI ĐẶT DỮ LIỆU CÂU HỎI & THÀNH VIÊN
+        </h3>
+        <button class="btn-ctrl" onclick="Game.closeEditor()">✕ Đóng</button>
+      </div>
+
+      <div class="editor-body">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+          Bạn có thể cập nhật danh sách học sinh 4 Tổ bên dưới (mỗi tên cách nhau bằng dấu phẩy) hoặc chỉnh sửa file <code>questions.js</code>!
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label class="form-label">Tổ 1 (Tên & Danh sách thành viên):</label>
+            <input type="text" class="form-input" id="edit-t1-name" placeholder="Tên Tổ 1" style="margin-bottom: 6px;">
+            <textarea class="form-textarea" id="edit-t1-members" placeholder="An, Bình, Cường..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tổ 2 (Tên & Danh sách thành viên):</label>
+            <input type="text" class="form-input" id="edit-t2-name" placeholder="Tên Tổ 2" style="margin-bottom: 6px;">
+            <textarea class="form-textarea" id="edit-t2-members" placeholder="Dũng, Hà, Long..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tổ 3 (Tên & Danh sách thành viên):</label>
+            <input type="text" class="form-input" id="edit-t3-name" placeholder="Tên Tổ 3" style="margin-bottom: 6px;">
+            <textarea class="form-textarea" id="edit-t3-members" placeholder="Quân, Quỳnh, Sang..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tổ 4 (Tên & Danh sách thành viên):</label>
+            <input type="text" class="form-input" id="edit-t4-name" placeholder="Tên Tổ 4" style="margin-bottom: 6px;">
+            <textarea class="form-textarea" id="edit-t4-members" placeholder="Phúc, Thắng, Linh..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 15px;">
+          <label class="form-label">Câu hỏi Vòng Boss (Tự luận Nữ thần):</label>
+          <textarea class="form-textarea" id="edit-boss-q" style="min-height: 70px;"></textarea>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--border-glass); padding-top: 14px;">
+        <button class="btn-ctrl" onclick="Game.closeEditor()">Hủy</button>
+        <button class="btn-judge btn-win" onclick="Game.saveEditorData()"><img src="assets/icons/check.svg" class="mini-game-icon" alt=""> Lưu Cài Đặt</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SCRIPTS -->
+  <script src="questions.js"></script>
+  <script src="audio.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

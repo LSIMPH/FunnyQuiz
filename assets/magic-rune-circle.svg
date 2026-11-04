@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000">
+  <defs>
+    <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0.96  0 1 0 0 0.75  0 0 1 0 0.2  0 0 0 1 0" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <path id="runeCirclePath1" d="M 500,500 m -440,0 a 440,440 0 1,1 880,0 a 440,440 0 1,1 -880,0" fill="none" />
+    <path id="runeCirclePath2" d="M 500,500 m -350,0 a 350,350 0 1,1 700,0 a 350,350 0 1,1 -700,0" fill="none" />
+  </defs>
+
+  <g fill="none" stroke="#f5b505" opacity="0.38" filter="url(#goldGlow)">
+    <!-- Vòng ngoài cùng -->
+    <circle cx="500" cy="500" r="475" stroke-width="2" />
+    <circle cx="500" cy="500" r="460" stroke-width="1.5" stroke-dasharray="8 6" />
+    <circle cx="500" cy="500" r="425" stroke-width="2.5" />
+
+    <!-- Chữ Cổ Ngữ Runes Vòng Ngoài -->
+    <text font-family="'Philosopher', 'Cinzel', serif" font-size="22" font-weight="900" fill="#f5b505" letter-spacing="14" opacity="0.8">
+      <textPath href="#runeCirclePath1">
+        ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛋ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛟ ᛞ • HN12A10 • ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛋ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛟ ᛞ • FORTUNE •
+      </textPath>
+    </text>
+
+    <!-- Vòng tròn thứ hai với các vạch la bàn -->
+    <circle cx="500" cy="500" r="380" stroke-width="1.5" />
+    <circle cx="500" cy="500" r="325" stroke-width="2" />
+    <text font-family="'Philosopher', 'Cinzel', serif" font-size="18" font-weight="900" fill="#f5b505" letter-spacing="18" opacity="0.75">
+      <textPath href="#runeCirclePath2">
+        IGNIS • GLACIES • FULGUR • TERRA • AETERNUM • DESTINY • VALOR • SAPIENTIA •
+      </textPath>
+    </text>
+
+    <!-- Ngôi Sao Bát Giác & Đa Giác Thiêng Liêng (Sacred Geometry) -->
+    <!-- Hình vuông 1 -->
+    <rect x="235" y="235" width="530" height="530" stroke-width="1.8" />
+    <!-- Hình vuông xoay 45 độ -->
+    <rect x="235" y="235" width="530" height="530" stroke-width="1.8" transform="rotate(45 500 500)" />
+    
+    <!-- Tam Giác Đối Xứng (Hexagram) -->
+    <polygon points="500,165 790,668 210,668" stroke-width="1.5" />
+    <polygon points="500,835 790,332 210,332" stroke-width="1.5" />
+
+    <!-- Vòng tròn trung tâm -->
+    <circle cx="500" cy="500" r="265" stroke-width="2" />
+    <circle cx="500" cy="500" r="250" stroke-width="1" stroke-dasharray="4 6" />
+    <circle cx="500" cy="500" r="170" stroke-width="2.5" />
+    <circle cx="500" cy="500" r="110" stroke-width="1.5" />
+    <circle cx="500" cy="500" r="50" stroke-width="3" />
+
+    <!-- 12 Tia Hướng Tâm -->
+    <line x1="500" y1="25" x2="500" y2="975" stroke-width="1" opacity="0.4" />
+    <line x1="25" y1="500" x2="975" y2="500" stroke-width="1" opacity="0.4" />
+    <line x1="164" y1="164" x2="836" y2="836" stroke-width="1" opacity="0.3" />
+    <line x1="836" y1="164" x2="164" y2="836" stroke-width="1" opacity="0.3" />
+  </g>
+</svg>
